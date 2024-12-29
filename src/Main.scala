@@ -1,6 +1,7 @@
 import hevs.graphics.FunGraphics
-import hevs.graphics.utils.GraphicsBitmap
+import hevs.graphics.samples.TestDrawString.fg.drawString
 
+import javax.sound.sampled.{AudioSystem, Clip}
 import java.awt.Color
 import java.awt.event.{KeyAdapter, KeyEvent}
 import javax.swing.Timer
@@ -11,7 +12,7 @@ import javax.swing.Timer
  * @param grid Grille du niveau, sous forme de tableau 2D d'entiers (chaque entier représente un type d'entité).
  * @param maxMoves Nombre maximum de déplacements autorisés dans ce niveau.
  */
-class Level(val grid: Array[Array[Int]], val maxMoves: Int) {
+class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]],val maxMoves: Int, val movableSpkies: Boolean = false, val offsetX:Int, val offsetY:Int,val demonPath: String , val backgroundPath: String = "") {
   val gridWidth: Int = grid.length
   val gridHeight: Int = grid(0).length
   var currentMoves: Int = 0
@@ -27,16 +28,34 @@ object Main {
   var gridWidth: Int = 5
   var gridHeight: Int = 5
 
-  val screenWidth = 1440
-  val screenHeight = 720
+  // New arrays for storing the previous frame’s state
+  var oldWorld: Array[Array[Int]] = _
+  var oldTrapWorld: Array[Array[Int]] = _
 
-  var tileSize = 60
+  // Keep track of the previous frame’s “moves left” to redraw only if changed
+  var oldMovesLeft: Int = -1
+
+  val playerImagePath = "/res/Mudry.png"
+  val demon1 = "/res/Pandemonia.gif"
+  val skeltonPath = "/res/skeleton.png"
+  val rockPath = "/res/rock.png"
+
+  val keyPath = "/res/key.png"
+  val chestPath = "/res/chest.png"
+  val spikeupPath = "/res/spikeup.png"
+  val spikedownPath = "/res/spikedown.png"
+
+  val screenWidth = 900
+  val screenHeight = 563
+
+  var tileSize = 47
   // Permet de centrer la grille sur l'écran
-  val offsetX = (screenWidth - (gridWidth * tileSize)) / 2
-  val offsetY = 0
+  val offsetX = (screenWidth - (gridWidth * tileSize)) / 2 - 70
+  val offsetY = 10
 
   // Création de la fenêtre graphique
   val fg = new FunGraphics(screenWidth, screenHeight, "ISC TAKER")
+
 
   // Codes associés aux différentes entités du jeu
   val P = 1  // Joueur
@@ -52,19 +71,153 @@ object Main {
   var playerPos = (0, 0)
 
   def main(args: Array[String]): Unit = {
+    try {
+      // Make sure bgmusic.wav is inside your resources folder, e.g.: src/main/resources/res/bgmusic.wav
+      val audioInputStream = AudioSystem.getAudioInputStream(
+        getClass.getResourceAsStream("/res/Mittsies-Vitality.wav")
+      )
+      val clip = AudioSystem.getClip
+      clip.open(audioInputStream)
+      clip.loop(Clip.LOOP_CONTINUOUSLY)
+      // clip.start() is implicitly called by .loop(...) if the clip wasn't running yet
+    } catch {
+      case ex: Exception =>
+        ex.printStackTrace()
+        println("Could not load or play the background music.")
+    }
+
     // Initialisation de la liste des niveaux
     levels = List(
+
       new Level(
         Array( // Un level du vrai jeu, très chiant à recopier si on veut en faire plus
+          Array(W, W, W, W, W, W, W, W),
+          Array(W, W, W, W, 0, 0, 0, W),
+          Array(W, W, 0, 0, 0, R, R, W),
+          Array(W, W, 0, S, W, 0, 0, W),
+          Array(W, W, S, 0, W, 0, R, W),
+          Array(W, 0, 0, S, W, R, 0, W),
+          Array(W, P, 0, W, W, 0, 0, W),
+          Array(W, W, W, W, W, W, G, W),
+          Array(W, W, W, W, W, W, W, W)
+
+        ),
+        Array(
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0)
+        )
+        ,23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,"/res/Pandemonia.gif", "/res/level 1.png",
+      ),
+      new Level(
+        Array(
+          Array(W, W, W, W, W, W, W, W),
+          Array(W, W, W, 0, 0, P, W, W),
+          Array(W, 0, S, 0, 0, 0, W, W),
+          Array(W, 0, W, W, W, W, W, W),
+          Array(W, 0, 0, W, W, W, W, W),
+          Array(W, 0, 0, R, 0, 0, G, W),
+          Array(W, W, 0, R, 0, S, 0, W),
+          Array(W, W, 0, R, 0, 0, S, W),
+          Array(W, W, W, W, W, W, W, W)
+
+
+
+        ),
+        Array(
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0,-1, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0,-1, 0, 0, 0, 0, 0),
+          Array(0, 0,-1,-1, 0, 0, 0, 0),
+          Array(0, 0, 0,-1,-1, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0)
+        ), 24 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,"/res/Modeus.gif", "/res/level 2.png"
+      ),
+      new Level(
+        Array(
+          Array(W, W, W, W, W, W, W, W, W),
+          Array(W, W, W, W, W, W, K, 0, W),
+          Array(W, W, W, W, W, W, W, 0, W),
+          Array(W, W, W, 0, 0, 0, 0, 0, W),
+          Array(W, G, W, 0, W, 0, W, 0, W),
+          Array(W, G, W, 0, 0, S, 0, 0, W),
+          Array(W, G, W, 0, W, 0, W, S, W),
+          Array(W, 0, C, 0, 0, 0, 0, 0, W),
+          Array(W, W, W, P, 0, W, W, W, W),
+          Array(W, W, W, W, W, W, W, W, W)
+        ),
+        Array(
+
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0,-1, 0,-1, 0, 0),
+          Array(0, 0, 0,-1, 0, 0, 0, 0, 0),
+          Array(0, 0, 0,-1,-1, 0,-1, 0, 0),
+          Array(0, 0, 0, 0, 0, 0,-1, 0, 0),
+          Array(0, 0, 0, 0, 0, 0,-1, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+        ), 32 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,"/res/Cerberus.gif", "/res/level 3.png"
+      ) ,
+      new Level(
+        Array(
+          Array(W, W, W, W, W, W, W),
+          Array(W, P, 0, R, 0, W, W),
+          Array(W, W, R, 0, R, 0, W),
+          Array(W, K, 0, R, 0, R, W),
+          Array(W, 0, R, 0, R, 0, W),
+          Array(W, R, 0, R, 0, R, W),
+          Array(W, W, C, R, R, 0, W),
+          Array(W, W, 0, 0, R, W, W),
+          Array(W, W, W, G, 0, W, W),
+          Array(W, W, W, W, W, W, W)
+        ),
+        Array(
+          Array(0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0,-1, 0, 0, 0, 0),
+          Array(0, 0,-1, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0)
+
+        ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,"/res/Malina.gif", "/res/level 4.png"
+      ),
+      new Level(
+        Array(
           Array(W, W, W, W, W, W, W, W, W, W),
-          Array(W, W, W, W, P, 0, S, T, W, W),
+          Array(W, W, W, W, P, 0, S, 0, W, W),
           Array(W, W, W, W, W, W, W, 0, W, W),
-          Array(W, W, W, 0, T, 0, R, T, W, W),
-          Array(W, W, 0, C, 0, T, R, 0, W, W),
+          Array(W, W, W, 0, 0, 0, R, 0, W, W),
+          Array(W, W, 0, C, 0, 0, R, 0, W, W),
           Array(W, W, G, R, R, 0, R, 0, W, W),
-          Array(W, W, W, 0, 0, T, R, T, K, W),
+          Array(W, W, W, 0, 0, 0, R, 0, K, W),
           Array(W, W, W, W, W, W, W, W, W, W)
-        ), 22
+        ),
+        Array(
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0,-1, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0,-1, 0, 0,-1, 0, 0),
+          Array(0, 0, 0, 0, 0,-1, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+          Array(0, 0, 0, 0, 0,-1, 0,-1, 0, 0),
+          Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+        ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,"/res/Zdrada.gif", "/res/level 5.png"
       )
     )
 
@@ -72,7 +225,7 @@ object Main {
     loadLevel(currentLevelIndex)
 
     // Démarre un timer pour redessiner le monde périodiquement
-    val timer = new Timer(100, _ => renderWorld())
+    val timer = new Timer(10, _ => renderWorld())
     timer.start()
 
     // Gestion des événements clavier
@@ -80,10 +233,15 @@ object Main {
       override def keyPressed(e: KeyEvent): Unit = {
         e.getKeyCode match {
           case KeyEvent.VK_UP    => handlePlayerInput(0, -1)
+            renderWorld()
           case KeyEvent.VK_DOWN  => handlePlayerInput(0, 1)
+            renderWorld()
           case KeyEvent.VK_LEFT  => handlePlayerInput(-1, 0)
+            renderWorld()
           case KeyEvent.VK_RIGHT => handlePlayerInput(1, 0)
+            renderWorld()
           case KeyEvent.VK_R     => loadLevel(currentLevelIndex) // Réinitialise le niveau
+            renderWorld()
           case _ => // Aucune action pour les autres touches
         }
       }
@@ -99,19 +257,23 @@ object Main {
     val level = levels(levelIndex)
     gridWidth = level.gridWidth
     gridHeight = level.gridHeight
-    // Copie profonde de la grille pour éviter toute modification directe du Level original
+
     world = level.grid.map(_.clone())
-    trapWorld = Array.fill(gridWidth, gridHeight)(0)
 
-    // Initialise l'état des pièges : s'il y a un T dans la grille, on marque -1 pour l'activation
-    for (x <- 0 until gridWidth; y <- 0 until gridHeight) {
-      if (world(x)(y) == T) trapWorld(x)(y) = -1
-    }
+    // 2) Copy the traps layer
+    trapWorld = level.trapsGrid.map(_.clone())
 
-    // Trouve la position initiale du joueur
+    // 3) oldWorld / oldTrapWorld for comparison
+    oldWorld    = Array.fill(gridWidth, gridHeight)(-999)
+    oldTrapWorld= Array.fill(gridWidth, gridHeight)(-999)
+
+    // Find player and reset moves, key, etc.
     playerPos = findPlayer(world)
     level.currentMoves = 0
     level.hasKey = false
+
+    // Force re-drawing of moves text next time
+    oldMovesLeft = -1
   }
 
   /**
@@ -154,7 +316,7 @@ object Main {
         level.hasKey = true
         println("Clé récupérée !")
       }
-      // Vérifie si on marche sur un piège "vivant" (-1)
+      // Vérifie si on marche sur un piège "vivant" (1)
       if (trapWorld(newX)(newY) == -1) {
         println("Ouch! Piège actif : vous perdez un déplacement supplémentaire.")
         level.currentMoves += 1 // Pénalité
@@ -165,7 +327,7 @@ object Main {
       level.currentMoves += 1
 
       // Inverse l'état des pièges après chaque déplacement
-      toggleTraps()
+      toggleTraps(level)
 
     } else if (world(newX)(newY) == C && level.hasKey) {
       // Ouvrir le coffre si on a la clé
@@ -188,7 +350,7 @@ object Main {
         else if (world(entityNewX)(entityNewY) == 0 || trapWorld(entityNewX)(entityNewY) != 0) {
           moveEntity(newX, newY, entityNewX, entityNewY)
           level.currentMoves += 1
-          toggleTraps()
+          toggleTraps(level)
         }
       }
 
@@ -204,16 +366,16 @@ object Main {
         // On regarde ce qui se trouve à l'endroit où on souhaite pousser le rocher
         world(entityNewX)(entityNewY) match {
           // Si la destination est un mur, un rocher ou un coffre, on ne peut pas pousser
-          case W | R | C =>
+          case W | R | C | S =>
             println("Rocher bloqué par un mur/rocher !")
             level.currentMoves += 1
-            toggleTraps()
+            toggleTraps(level)
 
           // S'il n'y a rien ou un piège, on peut pousser
           case _ =>
             moveEntity(newX, newY, entityNewX, entityNewY)
             level.currentMoves += 1
-            toggleTraps()
+            toggleTraps(level)
         }
       }
     }
@@ -224,10 +386,10 @@ object Main {
   /**
    * Change l'état de chaque piège : d'actif (-1) à inactif (1) et vice-versa.
    */
-  def toggleTraps(): Unit = {
+  def toggleTraps(level: Level ): Unit = {
     for (x <- 0 until gridWidth; y <- 0 until gridHeight) {
-      if (trapWorld(x)(y) == 1) trapWorld(x)(y) = -1
-      else if (trapWorld(x)(y) == -1) trapWorld(x)(y) = 1
+      if (trapWorld(x)(y) == 1 && level.movableSpkies) trapWorld(x)(y) = -1
+      else if (trapWorld(x)(y) == -1 && level.movableSpkies) trapWorld(x)(y) = 1
     }
   }
 
@@ -279,61 +441,152 @@ object Main {
       (world(x)(y) == 0 || trapWorld(x)(y) != 0)
   }
 
+  def arraysEqual2D(a: Array[Array[Int]], b: Array[Array[Int]]): Boolean = {
+    if (a.length != b.length) return false
+    for (i <- a.indices) {
+      if (a(i).length != b(i).length) return false
+      if (!a(i).sameElements(b(i))) return false
+    }
+    true
+  }
+
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
    */
   def renderWorld(): Unit = {
-    fg.clear(Color.WHITE)
-
-    // Dessine les pièges en premier
-    for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
-      if (trapWorld(i)(j) == 1) fg.setColor(Color.RED)
-      else if (trapWorld(i)(j) == -1) fg.setColor(Color.ORANGE)
-
-      if (trapWorld(i)(j) != 0) {
-        fg.drawFillRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-      }
-    }
-
-    // Dessine les entités par-dessus
-
-    //L'ordre n'as pas d'importance pour cette version du jeu mais avec les sprites il faut garder ce sens je pense
-    for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
-      world(i)(j) match {
-        case P =>
-          fg.setColor(Color.BLUE)
-          fg.drawFillRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-        case W =>
-          fg.setColor(Color.BLACK)
-          fg.drawFillRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-        case G =>
-          fg.setColor(Color.GREEN)
-          fg.drawFillRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-        case S =>
-          fg.setColor(Color.MAGENTA)
-          fg.drawFillRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-        case R =>
-          fg.setColor(Color.GRAY)
-          fg.drawFillRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-        case C =>
-          fg.setColor(Color.YELLOW)
-          fg.drawFillRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-        case K =>
-          fg.setColor(Color.PINK)
-          fg.drawFillRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-        case _ =>
-      }
-
-      // Dessine la grille (contour) pour délimiter les cases
-      fg.setColor(Color.BLACK)
-      fg.drawRect(offsetX + i * tileSize, offsetY + j * tileSize, tileSize, tileSize)
-    }
-
-    // Affiche le nombre de mouvements restants
     val level = levels(currentLevelIndex)
-    fg.setColor(Color.BLACK)
-    println(s"Mouvements restants : ${level.maxMoves - level.currentMoves}", 10, 20)
-    // A afficher sur le GUI du jeu
+    val movesLeft = level.maxMoves - level.currentMoves
+
+    if(!arraysEqual2D(world, oldWorld) || !arraysEqual2D(trapWorld, oldTrapWorld)){
+      fg.drawTransformedPicture(
+        posX   = screenWidth / 2,
+        posY   = screenHeight / 2,
+        angle  = 0.0,
+        scale  = 1,
+        imageName = level.backgroundPath
+      )
+
+      for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
+
+        // 2) Re-draw the trap if needed
+        if (trapWorld(i)(j) == 1) {
+          if(!level.movableSpkies){
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.1,
+              imageName = spikedownPath
+            )
+          }
+          else{
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.1,
+              imageName = spikeupPath
+            )
+          }
+        }
+        else if (trapWorld(i)(j) == -1) {
+          if(!level.movableSpkies) {
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.1,
+              imageName = spikeupPath
+            )
+          }
+          else{
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.1,
+              imageName = spikedownPath
+            )
+          }
+        }
+
+
+        // 3) Re-draw the actual entity
+        world(i)(j) match {
+          case P =>
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.7,
+              imageName = playerImagePath
+            )
+          case W =>
+
+          case G =>
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.8,
+              imageName = level.demonPath
+            )
+          case S =>
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.6,
+              imageName = skeltonPath
+            )
+          case R =>
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.11,
+              imageName = rockPath
+            )
+          case C =>
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.1,
+              imageName = chestPath
+            )
+          case K =>
+            fg.drawTransformedPicture(
+              posX   = level.offsetX + i * tileSize + tileSize / 2,
+              posY   = level.offsetY + j * tileSize + tileSize / 2,
+              angle  = 0.0,
+              scale  = 0.1,
+              imageName = keyPath
+            )
+          case _ =>
+          // 0 means empty, so we do nothing because the tile is already white
+        }
+        // 5) Update oldWorld and oldTrapWorld
+        oldWorld(i)(j) = world(i)(j)
+        oldTrapWorld(i)(j) = trapWorld(i)(j)
+      }
+
+    }
+    // Loop through the grid
+
+
+    // Finally, update the number of moves left on screen only if it changed
+    if (movesLeft != oldMovesLeft) {
+      // Clear the old text region. For example, assume we show it near top-left:
+
+
+      // Now draw the new text
+      fg.setColor(Color.WHITE)
+      fg.drawString(70,425,s"$movesLeft",Color.WHITE,50)
+
+      // Store the new movesLeft
+      oldMovesLeft = movesLeft
+    }
   }
 
   /**

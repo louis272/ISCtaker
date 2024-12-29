@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="fungraphics-1.5.15">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/fungraphics-1.5.15.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/fungraphics-1.5.15.jar!/" />
+    </SOURCES>
+  </library>
+</component>
