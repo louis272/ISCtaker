@@ -34,6 +34,8 @@ object Main {
   private var oldMovesLeft: Int = -1
 
   private val playerImagePath = "/res/Mudry.png"
+  private val playerImagePathFlipped = "/res/MudryFlipped.png"
+
   private val skeletonPath = "/res/skeleton.png"
   private val rockPath = "/res/rock.png"
 
@@ -108,7 +110,7 @@ object Main {
           Array(0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0)
         )
-        ,23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,"/res/Pandemonia.gif", "/res/level 1.png",
+        ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,"/res/Pandemonia.gif", "/res/level 1.png",
       ),
       new Level(
         Array(
@@ -135,7 +137,7 @@ object Main {
           Array(0, 0, 0,-1,-1, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0)
-        ), 24 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,"/res/Modeus.gif", "/res/level 2.png"
+        ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,"/res/Modeus.gif", "/res/level 2.png"
       ),
       new Level(
         Array(
@@ -163,7 +165,7 @@ object Main {
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-        ), 32 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,"/res/Cerberus.gif", "/res/level 3.png"
+        ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,"/res/Cerberus.gif", "/res/level 3.png"
       ) ,
       new Level(
         Array(
@@ -220,7 +222,7 @@ object Main {
     loadLevel(currentLevelIndex)
 
     // Démarre un timer pour redessiner le monde périodiquement
-    timer = new Timer(10, _ => renderWorld(false))
+    timer = new Timer(10, _ => renderWorld(forceRender = false,direction = false))
     timer.start()
 
     // Gestion des événements clavier
@@ -228,17 +230,17 @@ object Main {
       override def keyPressed(e: KeyEvent): Unit = {
         e.getKeyCode match {
           case KeyEvent.VK_UP    => handlePlayerInput(0, -1)
-            renderWorld(false)
+            renderWorld(forceRender = false,direction = false)
           case KeyEvent.VK_DOWN   => handlePlayerInput(0, 1)
-            renderWorld(false)
+            renderWorld(forceRender = false,direction = false)
           case KeyEvent.VK_LEFT   => handlePlayerInput(-1, 0)
-            renderWorld(false)
+            renderWorld(forceRender = false,direction = true)
           case KeyEvent.VK_RIGHT  => handlePlayerInput(1, 0)
-            renderWorld(false)
+            renderWorld(forceRender = false,direction = false)
           case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Réinitialise le niveau
-            renderWorld(false)
+            renderWorld(forceRender = false,direction = false)
           case KeyEvent.VK_L      => renderAdvice()
-          case KeyEvent.VK_ESCAPE => renderWorld(true)
+          case KeyEvent.VK_ESCAPE => renderWorld(forceRender = true,direction = false)
           case _ => // Aucune action pour les autres touches
         }
       }
@@ -441,7 +443,7 @@ object Main {
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
    */
-  def renderWorld(forceRender: Boolean): Unit = {
+  def renderWorld(forceRender: Boolean,direction:Boolean): Unit = {
     val level = levels(currentLevelIndex)
     val movesLeft = level.maxMoves - level.currentMoves
 
@@ -502,13 +504,25 @@ object Main {
         // 3) Re-draw the actual entity
         world(i)(j) match {
           case P =>
-            fg.drawTransformedPicture(
-              posX   = level.offsetX + i * tileSize + tileSize / 2,
-              posY   = level.offsetY + j * tileSize + tileSize / 2,
-              angle  = 0.0,
-              scale  = 0.7,
-              imageName = playerImagePath
-            )
+            if(direction){
+              fg.drawTransformedPicture(
+                posX   = level.offsetX + i * tileSize + tileSize / 2,
+                posY   = level.offsetY + j * tileSize + tileSize / 2,
+                angle  = 0.0,
+                scale  = 0.7,
+                imageName = playerImagePathFlipped
+              )
+            }
+            else{
+              fg.drawTransformedPicture(
+                posX   = level.offsetX + i * tileSize + tileSize / 2,
+                posY   = level.offsetY + j * tileSize + tileSize / 2,
+                angle  = 0.0,
+                scale  = 0.7,
+                imageName = playerImagePath
+              )
+            }
+
           case W =>
 
           case G =>
