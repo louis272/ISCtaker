@@ -578,7 +578,8 @@ object Main {
     // Finally, update the number of moves left on screen only if it changed
     if (movesLeft != oldMovesLeft) {
       // Clear the old text region. For example, assume we show it near top-left:
-
+      fg.setColor(Color.BLACK)
+      fg.drawFillRect(50,380,100,60)
 
       // Now draw the new text
       fg.setColor(Color.WHITE)
