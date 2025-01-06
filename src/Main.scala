@@ -225,7 +225,7 @@ object Main {
     loadLevel(currentLevelIndex)
 
     // Démarre un timer pour redessiner le monde périodiquement
-    val timer = new Timer(10, _ => renderWorld())
+    val timer = new Timer(10, _ => renderWorld(false))
     timer.start()
 
     // Gestion des événements clavier
@@ -233,15 +233,17 @@ object Main {
       override def keyPressed(e: KeyEvent): Unit = {
         e.getKeyCode match {
           case KeyEvent.VK_UP    => handlePlayerInput(0, -1)
-            renderWorld()
-          case KeyEvent.VK_DOWN  => handlePlayerInput(0, 1)
-            renderWorld()
-          case KeyEvent.VK_LEFT  => handlePlayerInput(-1, 0)
-            renderWorld()
-          case KeyEvent.VK_RIGHT => handlePlayerInput(1, 0)
-            renderWorld()
-          case KeyEvent.VK_R     => loadLevel(currentLevelIndex) // Réinitialise le niveau
-            renderWorld()
+            renderWorld(false)
+          case KeyEvent.VK_DOWN   => handlePlayerInput(0, 1)
+            renderWorld(false)
+          case KeyEvent.VK_LEFT   => handlePlayerInput(-1, 0)
+            renderWorld(false)
+          case KeyEvent.VK_RIGHT  => handlePlayerInput(1, 0)
+            renderWorld(false)
+          case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Réinitialise le niveau
+            renderWorld(false)
+          case KeyEvent.VK_L      => renderAdvice()
+          case KeyEvent.VK_ESCAPE => renderWorld(true)
           case _ => // Aucune action pour les autres touches
         }
       }
@@ -453,11 +455,11 @@ object Main {
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
    */
-  def renderWorld(): Unit = {
+  def renderWorld(forceRender: Boolean): Unit = {
     val level = levels(currentLevelIndex)
     val movesLeft = level.maxMoves - level.currentMoves
 
-    if(!arraysEqual2D(world, oldWorld) || !arraysEqual2D(trapWorld, oldTrapWorld)){
+    if(!arraysEqual2D(world, oldWorld) || !arraysEqual2D(trapWorld, oldTrapWorld) || forceRender) {
       fg.drawTransformedPicture(
         posX   = screenWidth / 2,
         posY   = screenHeight / 2,
@@ -613,6 +615,18 @@ object Main {
         // Ici, on pourrait stopper le jeu ou lancer une autre séquence.
       }
     }
+  }
+
+  def renderAdvice(): Unit = {
+    fg.setColor(Color.BLACK)
+    fg.drawFillRect(50,50,800,400)
+    fg.setColor(Color.WHITE)
+    fg.drawString(70,100,"ISC TAKER",Color.WHITE,50)
+    fg.drawString(70,150,"Déplacez-vous avec les touches fléchées.",Color.WHITE,20)
+    fg.drawString(70,200,"Récupérez la clé pour ouvrir le coffre.",Color.WHITE,20)
+    fg.drawString(70,250,"Poussez les rochers pour les déplacer.",Color.WHITE,20)
+    fg.drawString(70,300,"Evitez les squelettes et les pièges.",Color.WHITE,20)
+    fg.drawString(70,350,"Atteignez la case G pour terminer le niveau.",Color.WHITE,20)
   }
 }
 
