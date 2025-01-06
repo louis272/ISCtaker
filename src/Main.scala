@@ -220,7 +220,7 @@ object Main {
     loadLevel(currentLevelIndex)
 
     // Démarre un timer pour redessiner le monde périodiquement
-    timer = new Timer(10, _ => renderWorld())
+    timer = new Timer(10, _ => renderWorld(false))
     timer.start()
 
     // Gestion des événements clavier
