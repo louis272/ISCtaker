@@ -37,6 +37,8 @@ object Main extends App {
 
   private val tileSize = 47
 
+  private val gameMusic = new Audio("res/Mittsies-Vitality.wav")
+
   // Création de la fenêtre graphique
   private val fg = new FunGraphics(screenWidth, screenHeight, "ISC TAKER")
 
@@ -482,6 +484,9 @@ object Main extends App {
       }
     }
   })
+
+  // Lancement de la musique de fond
+  gameMusic.play()
 
   // Chargement du premier niveau
   loadLevel(currentLevelIndex)
