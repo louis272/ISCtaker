@@ -591,6 +591,9 @@ object Main extends App {
     }
   }
 
+  /**
+   * Renders the advice screen with game instructions.
+   */
   def renderAdvice(): Unit = {
     fg.setColor(Color.BLACK)
     fg.drawFillRect(50,50,800,400)
@@ -602,6 +605,7 @@ object Main extends App {
     fg.drawString(70,300,"Evitez les squelettes et les pièges.",Color.WHITE,20)
     fg.drawString(70,350,"Atteignez la case G pour terminer le niveau.",Color.WHITE,20)
   }
+
 
   // Gestion des événements clavier
   fg.setKeyManager(new KeyAdapter() {
@@ -627,6 +631,7 @@ object Main extends App {
   // Chargement du premier niveau
   loadLevel(currentLevelIndex)
 
+  // Boucle principale du jeu
   while (true) {
 
     if (!shouldRenderAdvice) {
