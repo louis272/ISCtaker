@@ -3,8 +3,9 @@ import java.awt.{Color, Font}
 import java.awt.event.{KeyAdapter, KeyEvent}
 import javax.swing.SwingConstants
 
-
-
+/**
+ * Main class for the game.
+ */
 object Main extends App {
   private var currentLevelIndex: Int = 0
   private var levels: List[Level] = _
@@ -36,10 +37,8 @@ object Main extends App {
 
   private val tileSize = 47
 
-
   // Création de la fenêtre graphique
   private val fg = new FunGraphics(screenWidth, screenHeight, "ISC TAKER")
-
 
   // Codes associés aux différentes entités du jeu
   val P = 1  // Joueur
@@ -256,7 +255,7 @@ object Main extends App {
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
    */
-  def renderWorld(forceRender: Boolean,direction:Boolean): Unit = {
+  private def renderWorld(forceRender: Boolean, direction:Boolean): Unit = {
     val level = levels(currentLevelIndex)
     val movesLeft = math.max(0, level.maxMoves - level.currentMoves)
 
@@ -450,7 +449,7 @@ object Main extends App {
   /**
    * Renders the advice screen with game instructions.
    */
-  def renderAdvice(): Unit = {
+  private def renderAdvice(): Unit = {
     fg.setColor(Color.BLACK)
     fg.drawFillRect(50,50,800,400)
     fg.setColor(Color.WHITE)
