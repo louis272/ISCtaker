@@ -13,6 +13,9 @@ class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val m
   var hasKey: Boolean = false
 }
 
+/**
+ * Companion object for the Level class, providing a method to initialize levels.
+ */
 object Level {
   def initializeLevels(screenWidth: Int, gridWidth: Int, tileSize: Int): List[Level] = {
     List(
