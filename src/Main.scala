@@ -1,9 +1,7 @@
 import hevs.graphics.FunGraphics
-
-import java.awt.event.{KeyAdapter, KeyEvent}
 import java.awt.{Color, Font}
-import javax.sound.sampled.{AudioSystem, Clip}
-import javax.swing.{SwingConstants, Timer}
+import java.awt.event.{KeyAdapter, KeyEvent}
+import javax.swing.SwingConstants
 
 /**
  * Représente un niveau du jeu.
@@ -18,7 +16,8 @@ class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val m
   var hasKey: Boolean = false
 }
 
-object Main {
+
+object Main extends App {
   private var currentLevelIndex: Int = 0
   private var levels: List[Level] = _
   private var world: Array[Array[Int]] = _
@@ -63,189 +62,147 @@ object Main {
   private val C = 6  // Coffre
   private val K = 8  // Clé
 
-
-  private var timer : Timer = _
-
   // Position initiale du joueur
   private var playerPos: (Int, Int) = (0, 0)
 
-  def main(args: Array[String]): Unit = {
-    try {
-      val audioInputStream = AudioSystem.getAudioInputStream(
-        getClass.getResourceAsStream("/res/Mittsies-Vitality.wav")
+  private var forceRender: Boolean = false
+  private var playerDirection: Boolean = false
+  private var shouldRenderAdvice: Boolean = false
+
+  // Initialisation de la liste des niveaux
+  levels = List(
+
+    new Level(
+      Array( // Un level du vrai jeu, vraiment chiant à recopier si on veut en faire plus
+        Array(W, W, W, W, W, W, W, W),
+        Array(W, W, W, W, 0, 0, 0, W),
+        Array(W, W, 0, 0, 0, R, R, W),
+        Array(W, W, 0, S, W, 0, 0, W),
+        Array(W, W, S, 0, W, 0, R, W),
+        Array(W, 0, 0, S, W, R, 0, W),
+        Array(W, P, 0, W, W, 0, 0, W),
+        Array(W, W, W, W, W, W, G, W),
+        Array(W, W, W, W, W, W, W, W)
+
+      ),
+      Array(
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0)
       )
-      val clip = AudioSystem.getClip
-      clip.open(audioInputStream)
-      clip.loop(Clip.LOOP_CONTINUOUSLY)
-    } catch {
-      case ex: Exception =>
-        ex.printStackTrace()
-        println("Could not load or play the background music.")
-    }
+      ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,"/res/Pandemonia.gif", "/res/level 1.png",
+    ),
+    new Level(
+      Array(
+        Array(W, W, W, W, W, W, W, W),
+        Array(W, W, W, 0, 0, P, W, W),
+        Array(W, 0, S, 0, 0, 0, W, W),
+        Array(W, 0, W, W, W, W, W, W),
+        Array(W, 0, 0, W, W, W, W, W),
+        Array(W, 0, 0, R, 0, 0, G, W),
+        Array(W, W, 0, R, 0, S, 0, W),
+        Array(W, W, 0, R, 0, 0, S, W),
+        Array(W, W, W, W, W, W, W, W)
 
-    // Initialisation de la liste des niveaux
-    levels = List(
 
-      new Level(
-        Array( // Un level du vrai jeu, vraiment chiant à recopier si on veut en faire plus
-          Array(W, W, W, W, W, W, W, W),
-          Array(W, W, W, W, 0, 0, 0, W),
-          Array(W, W, 0, 0, 0, R, R, W),
-          Array(W, W, 0, S, W, 0, 0, W),
-          Array(W, W, S, 0, W, 0, R, W),
-          Array(W, 0, 0, S, W, R, 0, W),
-          Array(W, P, 0, W, W, 0, 0, W),
-          Array(W, W, W, W, W, W, G, W),
-          Array(W, W, W, W, W, W, W, W)
 
-        ),
-        Array(
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0)
-        )
-        ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,"/res/Pandemonia.gif", "/res/level 1.png",
       ),
-      new Level(
-        Array(
-          Array(W, W, W, W, W, W, W, W),
-          Array(W, W, W, 0, 0, P, W, W),
-          Array(W, 0, S, 0, 0, 0, W, W),
-          Array(W, 0, W, W, W, W, W, W),
-          Array(W, 0, 0, W, W, W, W, W),
-          Array(W, 0, 0, R, 0, 0, G, W),
-          Array(W, W, 0, R, 0, S, 0, W),
-          Array(W, W, 0, R, 0, 0, S, W),
-          Array(W, W, W, W, W, W, W, W)
-
-
-
-        ),
-        Array(
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0,-1, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0,-1, 0, 0, 0, 0, 0),
-          Array(0, 0,-1,-1, 0, 0, 0, 0),
-          Array(0, 0, 0,-1,-1, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0)
-        ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,"/res/Modeus.gif", "/res/level 2.png"
+      Array(
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0,-1, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0,-1, 0, 0, 0, 0, 0),
+        Array(0, 0,-1,-1, 0, 0, 0, 0),
+        Array(0, 0, 0,-1,-1, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0)
+      ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,"/res/Modeus.gif", "/res/level 2.png"
+    ),
+    new Level(
+      Array(
+        Array(W, W, W, W, W, W, W, W, W),
+        Array(W, W, W, W, W, W, K, 0, W),
+        Array(W, W, W, W, W, W, W, 0, W),
+        Array(W, W, W, 0, 0, 0, 0, 0, W),
+        Array(W, G, W, 0, W, 0, W, 0, W),
+        Array(W, G, W, 0, 0, S, 0, 0, W),
+        Array(W, G, W, 0, W, 0, W, S, W),
+        Array(W, 0, C, 0, 0, 0, 0, 0, W),
+        Array(W, W, W, P, 0, W, W, W, W),
+        Array(W, W, W, W, W, W, W, W, W)
       ),
-      new Level(
-        Array(
-          Array(W, W, W, W, W, W, W, W, W),
-          Array(W, W, W, W, W, W, K, 0, W),
-          Array(W, W, W, W, W, W, W, 0, W),
-          Array(W, W, W, 0, 0, 0, 0, 0, W),
-          Array(W, G, W, 0, W, 0, W, 0, W),
-          Array(W, G, W, 0, 0, S, 0, 0, W),
-          Array(W, G, W, 0, W, 0, W, S, W),
-          Array(W, 0, C, 0, 0, 0, 0, 0, W),
-          Array(W, W, W, P, 0, W, W, W, W),
-          Array(W, W, W, W, W, W, W, W, W)
-        ),
-        Array(
+      Array(
 
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0,-1, 0,-1, 0, 0),
-          Array(0, 0, 0,-1, 0, 0, 0, 0, 0),
-          Array(0, 0, 0,-1,-1, 0,-1, 0, 0),
-          Array(0, 0, 0, 0, 0, 0,-1, 0, 0),
-          Array(0, 0, 0, 0, 0, 0,-1, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0,-1, 0,-1, 0, 0),
+        Array(0, 0, 0,-1, 0, 0, 0, 0, 0),
+        Array(0, 0, 0,-1,-1, 0,-1, 0, 0),
+        Array(0, 0, 0, 0, 0, 0,-1, 0, 0),
+        Array(0, 0, 0, 0, 0, 0,-1, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-        ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,"/res/Cerberus.gif", "/res/level 3.png"
-      ) ,
-      new Level(
-        Array(
-          Array(W, W, W, W, W, W, W),
-          Array(W, P, 0, R, 0, W, W),
-          Array(W, W, R, 0, R, 0, W),
-          Array(W, K, 0, R, 0, R, W),
-          Array(W, 0, R, 0, R, 0, W),
-          Array(W, R, 0, R, 0, R, W),
-          Array(W, W, C, R, R, 0, W),
-          Array(W, W, 0, 0, R, W, W),
-          Array(W, W, W, G, 0, W, W),
-          Array(W, W, W, W, W, W, W)
-        ),
-        Array(
-          Array(0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0,-1, 0, 0, 0, 0),
-          Array(0, 0,-1, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0)
-
-        ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,"/res/Malina.gif", "/res/level 4.png"
+      ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,"/res/Cerberus.gif", "/res/level 3.png"
+    ) ,
+    new Level(
+      Array(
+        Array(W, W, W, W, W, W, W),
+        Array(W, P, 0, R, 0, W, W),
+        Array(W, W, R, 0, R, 0, W),
+        Array(W, K, 0, R, 0, R, W),
+        Array(W, 0, R, 0, R, 0, W),
+        Array(W, R, 0, R, 0, R, W),
+        Array(W, W, C, R, R, 0, W),
+        Array(W, W, 0, 0, R, W, W),
+        Array(W, W, W, G, 0, W, W),
+        Array(W, W, W, W, W, W, W)
       ),
-      new Level(
-        Array(
-          Array(W, W, W, W, W, W, W, W, W, W),
-          Array(W, W, W, W, P, 0, S, 0, W, W),
-          Array(W, W, W, W, W, W, W, 0, W, W),
-          Array(W, W, W, 0, 0, 0, R, 0, W, W),
-          Array(W, W, 0, C, 0, 0, R, 0, W, W),
-          Array(W, W, G, R, R, 0, R, 0, W, W),
-          Array(W, W, W, 0, 0, 0, R, 0, K, W),
-          Array(W, W, W, W, W, W, W, W, W, W)
-        ),
-        Array(
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0,-1, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0,-1, 0, 0,-1, 0, 0),
-          Array(0, 0, 0, 0, 0,-1, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-          Array(0, 0, 0, 0, 0,-1, 0,-1, 0, 0),
-          Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-        ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,"/res/Zdrada.gif", "/res/level 5.png"
-      )
+      Array(
+        Array(0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0,-1, 0, 0, 0, 0),
+        Array(0, 0,-1, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0)
+
+      ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,"/res/Malina.gif", "/res/level 4.png"
+    ),
+    new Level(
+      Array(
+        Array(W, W, W, W, W, W, W, W, W, W),
+        Array(W, W, W, W, P, 0, S, 0, W, W),
+        Array(W, W, W, W, W, W, W, 0, W, W),
+        Array(W, W, W, 0, 0, 0, R, 0, W, W),
+        Array(W, W, 0, C, 0, 0, R, 0, W, W),
+        Array(W, W, G, R, R, 0, R, 0, W, W),
+        Array(W, W, W, 0, 0, 0, R, 0, K, W),
+        Array(W, W, W, W, W, W, W, W, W, W)
+      ),
+      Array(
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0,-1, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0,-1, 0, 0,-1, 0, 0),
+        Array(0, 0, 0, 0, 0,-1, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+        Array(0, 0, 0, 0, 0,-1, 0,-1, 0, 0),
+        Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+      ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,"/res/Zdrada.gif", "/res/level 5.png"
     )
-
-    // Chargement du premier niveau
-    loadLevel(currentLevelIndex)
-
-    // Démarre un timer pour redessiner le monde périodiquement
-    timer = new Timer(10, _ => renderWorld(forceRender = false,direction = false))
-    timer.start()
-
-    // Gestion des événements clavier
-    fg.setKeyManager(new KeyAdapter() {
-      override def keyPressed(e: KeyEvent): Unit = {
-        e.getKeyCode match {
-          case KeyEvent.VK_UP    => handlePlayerInput(0, -1)
-            renderWorld(forceRender = false,direction = false)
-          case KeyEvent.VK_DOWN   => handlePlayerInput(0, 1)
-            renderWorld(forceRender = false,direction = false)
-          case KeyEvent.VK_LEFT   => handlePlayerInput(-1, 0)
-            renderWorld(forceRender = false,direction = true)
-          case KeyEvent.VK_RIGHT  => handlePlayerInput(1, 0)
-            renderWorld(forceRender = false,direction = false)
-          case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Réinitialise le niveau
-            renderWorld(forceRender = false,direction = false)
-          case KeyEvent.VK_L      => renderAdvice()
-          case KeyEvent.VK_ESCAPE => renderWorld(forceRender = true,direction = false)
-          case _ => // Aucune action pour les autres touches
-        }
-      }
-    })
-  }
+  )
 
   /**
    * Charge un niveau à partir d'un index donné.
@@ -298,7 +255,7 @@ object Main {
     val level = levels(currentLevelIndex)
 
     // Vérifie si le joueur a déjà épuisé tous ses déplacements
-    if (level.currentMoves == level.maxMoves) {
+    if (level.currentMoves >= level.maxMoves) {
       println("Mouvements épuisés ! Redémarrage du niveau.")
       loadLevel(currentLevelIndex)
       return
@@ -445,7 +402,7 @@ object Main {
    */
   def renderWorld(forceRender: Boolean,direction:Boolean): Unit = {
     val level = levels(currentLevelIndex)
-    val movesLeft = level.maxMoves - level.currentMoves
+    val movesLeft = math.max(0, level.maxMoves - level.currentMoves)
 
     if(!arraysEqual2D(world, oldWorld) || !arraysEqual2D(trapWorld, oldTrapWorld) || forceRender) {
       fg.drawTransformedPicture(
@@ -578,7 +535,7 @@ object Main {
 
 
     // Finally, update the number of moves left on screen only if it changed
-    if (movesLeft != oldMovesLeft) {
+    if (movesLeft != oldMovesLeft || forceRender) {
       // Clear the old text region. For example, assume we show it near top-left:
       fg.setColor(Color.BLACK)
       fg.drawFillRect(50,380,100,60)
@@ -601,11 +558,6 @@ object Main {
         shadowThickness = 10,
         outlineColor = Color.BLACK,
         outlineThickness = 20
-
-
-
-
-
       )
 
       // Store the new movesLeft
@@ -633,7 +585,6 @@ object Main {
         loadLevel(currentLevelIndex)
       } else {
         println("Félicitations ! Vous avez terminé tous les niveaux !")
-        timer.stop()
 
         // Ici, on pourrait stopper le jeu ou lancer une autre séquence.
       }
@@ -651,4 +602,45 @@ object Main {
     fg.drawString(70,300,"Evitez les squelettes et les pièges.",Color.WHITE,20)
     fg.drawString(70,350,"Atteignez la case G pour terminer le niveau.",Color.WHITE,20)
   }
+
+  // Gestion des événements clavier
+  fg.setKeyManager(new KeyAdapter() {
+    override def keyPressed(e: KeyEvent): Unit = {
+      e.getKeyCode match {
+        case KeyEvent.VK_UP     => handlePlayerInput(0, -1)
+          forceRender = false; playerDirection = false
+        case KeyEvent.VK_DOWN   => handlePlayerInput(0, 1)
+          forceRender = false; playerDirection = false
+        case KeyEvent.VK_LEFT   => handlePlayerInput(-1, 0)
+          forceRender = false; playerDirection = true
+        case KeyEvent.VK_RIGHT  => handlePlayerInput(1, 0)
+          forceRender = false; playerDirection = false
+        case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Réinitialise le niveau
+          forceRender = false; playerDirection = false
+        case KeyEvent.VK_L      => shouldRenderAdvice = true // Affiche les conseils
+        case KeyEvent.VK_ESCAPE => shouldRenderAdvice = false; forceRender = true // Cache les conseils
+        case _                  => // Aucune action pour les autres touches
+      }
+    }
+  })
+
+  // Chargement du premier niveau
+  loadLevel(currentLevelIndex)
+
+  while (true) {
+
+    if (!shouldRenderAdvice) {
+      fg.frontBuffer.synchronized{
+        renderWorld(forceRender, playerDirection)
+      }
+    } else {
+      fg.frontBuffer.synchronized{
+        renderAdvice()
+      }
+    }
+
+
+    fg.syncGameLogic(60)
+  }
+
 }
