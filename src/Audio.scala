@@ -2,7 +2,7 @@ import javax.sound.sampled.{AudioSystem, Clip}
 
 /**
  * Audio class
- * @param path
+ * @param path: Path to the audio file
  */
 class Audio (path : String) {
   var audioClip: Clip = _
