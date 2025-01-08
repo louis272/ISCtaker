@@ -500,7 +500,7 @@ object Main extends App {
     }
 
 
-    fg.syncGameLogic(240)
+    fg.syncGameLogic(60)
   }
 
 }
