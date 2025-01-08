@@ -3,18 +3,6 @@ import java.awt.{Color, Font}
 import java.awt.event.{KeyAdapter, KeyEvent}
 import javax.swing.SwingConstants
 
-/**
- * Représente un niveau du jeu.
- *
- * @param grid Grille du niveau, sous forme de tableau 2D d'entiers (chaque entier représente un type d'entité).
- * @param maxMoves Nombre maximum de déplacements autorisés dans ce niveau.
- */
-class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val maxMoves: Int, val movableSpikes: Boolean = false, val offsetX:Int, val offsetY:Int, val demonPath: String, val backgroundPath: String = "") {
-  val gridWidth: Int = grid.length
-  val gridHeight: Int = grid(0).length
-  var currentMoves: Int = 0
-  var hasKey: Boolean = false
-}
 
 
 object Main extends App {
@@ -54,13 +42,13 @@ object Main extends App {
 
 
   // Codes associés aux différentes entités du jeu
-  private val P = 1  // Joueur
-  private val W = 2  // Mur
-  private val G = 3  // But (Goal)
-  private val S = 4  // Squelette
-  private val R = 5  // Rocher
-  private val C = 6  // Coffre
-  private val K = 8  // Clé
+  val P = 1  // Joueur
+  val W = 2  // Mur
+  val G = 3  // But (Goal)
+  val S = 4  // Squelette
+  val R = 5  // Rocher
+  val C = 6  // Coffre
+  val K = 8  // Clé
 
   // Position initiale du joueur
   private var playerPos: (Int, Int) = (0, 0)
@@ -70,139 +58,7 @@ object Main extends App {
   private var shouldRenderAdvice: Boolean = false
 
   // Initialisation de la liste des niveaux
-  levels = List(
-
-    new Level(
-      Array( // Un level du vrai jeu, vraiment chiant à recopier si on veut en faire plus
-        Array(W, W, W, W, W, W, W, W),
-        Array(W, W, W, W, 0, 0, 0, W),
-        Array(W, W, 0, 0, 0, R, R, W),
-        Array(W, W, 0, S, W, 0, 0, W),
-        Array(W, W, S, 0, W, 0, R, W),
-        Array(W, 0, 0, S, W, R, 0, W),
-        Array(W, P, 0, W, W, 0, 0, W),
-        Array(W, W, W, W, W, W, G, W),
-        Array(W, W, W, W, W, W, W, W)
-
-      ),
-      Array(
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0)
-      )
-      ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,"/res/Pandemonia.gif", "/res/level 1.png",
-    ),
-    new Level(
-      Array(
-        Array(W, W, W, W, W, W, W, W),
-        Array(W, W, W, 0, 0, P, W, W),
-        Array(W, 0, S, 0, 0, 0, W, W),
-        Array(W, 0, W, W, W, W, W, W),
-        Array(W, 0, 0, W, W, W, W, W),
-        Array(W, 0, 0, R, 0, 0, G, W),
-        Array(W, W, 0, R, 0, S, 0, W),
-        Array(W, W, 0, R, 0, 0, S, W),
-        Array(W, W, W, W, W, W, W, W)
-
-
-
-      ),
-      Array(
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0,-1, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0,-1, 0, 0, 0, 0, 0),
-        Array(0, 0,-1,-1, 0, 0, 0, 0),
-        Array(0, 0, 0,-1,-1, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0)
-      ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,"/res/Modeus.gif", "/res/level 2.png"
-    ),
-    new Level(
-      Array(
-        Array(W, W, W, W, W, W, W, W, W),
-        Array(W, W, W, W, W, W, K, 0, W),
-        Array(W, W, W, W, W, W, W, 0, W),
-        Array(W, W, W, 0, 0, 0, 0, 0, W),
-        Array(W, G, W, 0, W, 0, W, 0, W),
-        Array(W, G, W, 0, 0, S, 0, 0, W),
-        Array(W, G, W, 0, W, 0, W, S, W),
-        Array(W, 0, C, 0, 0, 0, 0, 0, W),
-        Array(W, W, W, P, 0, W, W, W, W),
-        Array(W, W, W, W, W, W, W, W, W)
-      ),
-      Array(
-
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0,-1, 0,-1, 0, 0),
-        Array(0, 0, 0,-1, 0, 0, 0, 0, 0),
-        Array(0, 0, 0,-1,-1, 0,-1, 0, 0),
-        Array(0, 0, 0, 0, 0, 0,-1, 0, 0),
-        Array(0, 0, 0, 0, 0, 0,-1, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
-
-      ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,"/res/Cerberus.gif", "/res/level 3.png"
-    ) ,
-    new Level(
-      Array(
-        Array(W, W, W, W, W, W, W),
-        Array(W, P, 0, R, 0, W, W),
-        Array(W, W, R, 0, R, 0, W),
-        Array(W, K, 0, R, 0, R, W),
-        Array(W, 0, R, 0, R, 0, W),
-        Array(W, R, 0, R, 0, R, W),
-        Array(W, W, C, R, R, 0, W),
-        Array(W, W, 0, 0, R, W, W),
-        Array(W, W, W, G, 0, W, W),
-        Array(W, W, W, W, W, W, W)
-      ),
-      Array(
-        Array(0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0,-1, 0, 0, 0, 0),
-        Array(0, 0,-1, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0)
-
-      ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,"/res/Malina.gif", "/res/level 4.png"
-    ),
-    new Level(
-      Array(
-        Array(W, W, W, W, W, W, W, W, W, W),
-        Array(W, W, W, W, P, 0, S, 0, W, W),
-        Array(W, W, W, W, W, W, W, 0, W, W),
-        Array(W, W, W, 0, 0, 0, R, 0, W, W),
-        Array(W, W, 0, C, 0, 0, R, 0, W, W),
-        Array(W, W, G, R, R, 0, R, 0, W, W),
-        Array(W, W, W, 0, 0, 0, R, 0, K, W),
-        Array(W, W, W, W, W, W, W, W, W, W)
-      ),
-      Array(
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0,-1, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0,-1, 0, 0,-1, 0, 0),
-        Array(0, 0, 0, 0, 0,-1, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-        Array(0, 0, 0, 0, 0,-1, 0,-1, 0, 0),
-        Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-      ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,"/res/Zdrada.gif", "/res/level 5.png"
-    )
-  )
+  levels = Level.initializeLevels(screenWidth, gridWidth, tileSize)
 
   /**
    * Charge un niveau à partir d'un index donné.
@@ -645,7 +501,7 @@ object Main extends App {
     }
 
 
-    fg.syncGameLogic(60)
+    fg.syncGameLogic(240)
   }
 
 }
