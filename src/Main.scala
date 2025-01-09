@@ -258,6 +258,7 @@ object Main extends App {
     if (level.currentMoves >= level.maxMoves) {
       println("Mouvements épuisés ! Redémarrage du niveau.")
       playerDeath.play()
+      transitionScreen()
       loadLevel(currentLevelIndex)
       return
     }
@@ -624,12 +625,7 @@ object Main extends App {
       currentLevelIndex += 1
       if (currentLevelIndex < levels.length) {
 
-        // Affiche l'écran de transition
-        screenChanger.play()
-        shouldRenderTransition = true
-        // Attendre 2 secondes avant de charger le prochain niveau
-        Thread.sleep(2000)
-        shouldRenderTransition = false
+        transitionScreen()
 
         loadLevel(currentLevelIndex)
       } else {
@@ -638,6 +634,15 @@ object Main extends App {
         // Ici, on pourrait stopper le jeu ou lancer une autre séquence.
       }
     }
+  }
+
+  private def transitionScreen(): Unit = {
+    // Affiche l'écran de transition
+    screenChanger.play()
+    shouldRenderTransition = true
+    // Attendre 2 secondes avant de charger le prochain niveau
+    Thread.sleep(2000)
+    shouldRenderTransition = false
   }
 
   /**
@@ -677,7 +682,7 @@ object Main extends App {
         case KeyEvent.VK_RIGHT  => handlePlayerInput(1, 0)
           playerDirection = false
         case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Réinitialise le niveau
-          playerDirection = false; playerDeath.play()
+          playerDirection = false; playerDeath.play(); transitionScreen()
         case KeyEvent.VK_L      => shouldRenderAdvice = true // Affiche les conseils
         case KeyEvent.VK_ESCAPE => shouldRenderAdvice = false // Cache les conseils
         case KeyEvent.VK_0      => currentLevelIndex = 0; loadLevel(currentLevelIndex) // Charge le niveau 0
