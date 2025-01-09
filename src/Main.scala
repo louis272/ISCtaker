@@ -9,11 +9,16 @@ import javax.swing.SwingConstants
  * @param grid Grille du niveau, sous forme de tableau 2D d'entiers (chaque entier représente un type d'entité).
  * @param maxMoves Nombre maximum de déplacements autorisés dans ce niveau.
  */
-class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val maxMoves: Int, val movableSpikes: Boolean = false, val offsetX:Int, val offsetY:Int, val demonPath: String, val backgroundPath: String = "") {
+class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val maxMoves: Int, val movableSpikes: Boolean = false, val offsetX:Int, val offsetY:Int, val Demon: EntityRender, val backgroundPath: String = "") {
   val gridWidth: Int = grid.length
   val gridHeight: Int = grid(0).length
   var currentMoves: Int = 0
   var hasKey: Boolean = false
+}
+
+
+class EntityRender( var frames: List[String], var scale : Double) {
+  def this(scale: Double) = this(List(), scale)
 }
 
 
@@ -24,6 +29,57 @@ object Main extends App {
   private var trapWorld: Array[Array[Int]] = _
   private var gridWidth: Int = 5
   private var gridHeight: Int = 5
+
+  private var frameCount: Int = 0
+
+  private var AnimationIndex: Int = 0
+
+  private var Mudry: EntityRender = new EntityRender(
+    List(
+      "/res/Mudry - Idle.png",
+      "/res/Mudry - Left.png",
+      "/res/Mudry - Idle.png",
+      "/res/Mudry - Right.png",
+    ),
+    0.7
+  )
+
+  private var MudryKick : EntityRender = new EntityRender(
+    List(
+      "/res/Mudry Kick - frame 1.png",
+      "/res/Mudry Kick - frame 2.png",
+      "/res/Mudry Kick - frame 3.png",
+      "/res/Mudry Kick - frame 4.png",
+    ),
+    0.7
+  )
+
+  private var Pandemonica : EntityRender = new EntityRender(
+    List(
+      "/res/Pandemonica - Idle.gif",
+      "/res/Pandemonica - Left.gif",
+      "/res/Pandemonica - Idle.gif",
+      "/res/Pandemonica - Right.gif",
+    ),
+    0.6
+  )
+
+  private var Modeus : EntityRender = new EntityRender(
+    List(),
+    0.6
+)
+  private var Skeleton : EntityRender = new EntityRender(
+    List(
+      "/res/skeleton - Idle.gif",
+      "/res/skeleton - Left.gif",
+      "/res/skeleton - Idle.gif",
+      "/res/skeleton - Right.gif",
+    ),
+    0.6
+  )
+
+
+
 
   // New arrays for storing the previous frame’s state
   private var oldWorld: Array[Array[Int]] = _
@@ -69,6 +125,8 @@ object Main extends App {
   private var playerDirection: Boolean = false
   private var shouldRenderAdvice: Boolean = false
 
+
+
   // Initialisation de la liste des niveaux
   levels = List(
 
@@ -96,7 +154,7 @@ object Main extends App {
         Array(0, 0, 0, 0, 0, 0, 0, 0),
         Array(0, 0, 0, 0, 0, 0, 0, 0)
       )
-      ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,"/res/Pandemonia.gif", "/res/level 1.png",
+      ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,Pandemonica, "/res/level 1.png",
     ),
     new Level(
       Array(
@@ -123,7 +181,7 @@ object Main extends App {
         Array(0, 0, 0,-1,-1, 0, 0, 0),
         Array(0, 0, 0, 0, 0, 0, 0, 0),
         Array(0, 0, 0, 0, 0, 0, 0, 0)
-      ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,"/res/Modeus.gif", "/res/level 2.png"
+      ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,Pandemonica, "/res/level 2.png"
     ),
     new Level(
       Array(
@@ -151,7 +209,7 @@ object Main extends App {
         Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
         Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-      ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,"/res/Cerberus.gif", "/res/level 3.png"
+      ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,Pandemonica, "/res/level 3.png"
     ) ,
     new Level(
       Array(
@@ -178,7 +236,7 @@ object Main extends App {
         Array(0, 0, 0, 0, 0, 0, 0),
         Array(0, 0, 0, 0, 0, 0, 0)
 
-      ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,"/res/Malina.gif", "/res/level 4.png"
+      ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,Pandemonica, "/res/level 4.png"
     ),
     new Level(
       Array(
@@ -200,9 +258,10 @@ object Main extends App {
         Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
         Array(0, 0, 0, 0, 0,-1, 0,-1, 0, 0),
         Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-      ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,"/res/Zdrada.gif", "/res/level 5.png"
+      ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,Pandemonica, "/res/level 5.png"
     )
   )
+
 
   /**
    * Charge un niveau à partir d'un index donné.
@@ -400,11 +459,13 @@ object Main extends App {
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
    */
-  def renderWorld(forceRender: Boolean,direction:Boolean): Unit = {
+  def renderWorld(forceRender: Boolean,direction:Boolean,AnimationIndex:Int): Unit = {
     val level = levels(currentLevelIndex)
     val movesLeft = math.max(0, level.maxMoves - level.currentMoves)
 
-    if(!arraysEqual2D(world, oldWorld) || !arraysEqual2D(trapWorld, oldTrapWorld) || forceRender) {
+    fg.displayFPS(true)
+
+    if(true || forceRender) {
       fg.drawTransformedPicture(
         posX   = screenWidth / 2,
         posY   = screenHeight / 2,
@@ -412,6 +473,28 @@ object Main extends App {
         scale  = 1,
         imageName = level.backgroundPath
       )
+
+      fg.setColor(Color.BLACK)
+      fg.drawFillRect(50,380,100,60)
+
+      // Now draw the new text
+      fg.setColor(Color.WHITE)
+      fg.drawFancyString(
+        posX    = 70,
+        posY    = 425,
+        str = s"$movesLeft",
+        fontFamily = "Arial",
+        fontStyle = Font.BOLD,
+        fontSize = 50,
+        color = Color.WHITE,
+        halign =  SwingConstants.LEFT,
+        valign = SwingConstants.BOTTOM,
+        shadowX = 0,
+        shadowY = 0,
+        shadowColor = Color.BLACK,
+        shadowThickness = 10,
+        outlineColor = Color.BLACK,
+        outlineThickness = 20)
 
       for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
 
@@ -466,8 +549,8 @@ object Main extends App {
                 posX   = level.offsetX + i * tileSize + tileSize / 2,
                 posY   = level.offsetY + j * tileSize + tileSize / 2,
                 angle  = 0.0,
-                scale  = 0.7,
-                imageName = playerImagePathFlipped
+                scale  = Mudry.scale,
+                imageName = Mudry.frames(AnimationIndex)
               )
             }
             else{
@@ -488,15 +571,15 @@ object Main extends App {
               posY   = level.offsetY + j * tileSize + tileSize / 2,
               angle  = 0.0,
               scale  = 0.8,
-              imageName = level.demonPath
+              imageName = level.Demon.frames(AnimationIndex)
             )
           case S =>
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
               posY   = level.offsetY + j * tileSize + tileSize / 2,
               angle  = 0.0,
-              scale  = 0.6,
-              imageName = skeletonPath
+              scale  = Skeleton.scale,
+              imageName = Skeleton.frames(AnimationIndex)
             )
           case R =>
             fg.drawTransformedPicture(
@@ -535,34 +618,17 @@ object Main extends App {
 
 
     // Finally, update the number of moves left on screen only if it changed
-    if (movesLeft != oldMovesLeft || forceRender) {
+
       // Clear the old text region. For example, assume we show it near top-left:
-      fg.setColor(Color.BLACK)
-      fg.drawFillRect(50,380,100,60)
 
-      // Now draw the new text
-      fg.setColor(Color.WHITE)
-      fg.drawFancyString(
-        posX    = 70,
-        posY    = 425,
-        str = s"$movesLeft",
-        fontFamily = "Arial",
-        fontStyle = Font.BOLD,
-        fontSize = 50,
-        color = Color.WHITE,
-        halign =  SwingConstants.LEFT,
-        valign = SwingConstants.BOTTOM,
-        shadowX = 0,
-        shadowY = 0,
-        shadowColor = Color.BLACK,
-        shadowThickness = 10,
-        outlineColor = Color.BLACK,
-        outlineThickness = 20
-      )
 
-      // Store the new movesLeft
-      oldMovesLeft = movesLeft
-    }
+
+
+
+
+
+
+
   }
 
   /**
@@ -631,21 +697,30 @@ object Main extends App {
   // Chargement du premier niveau
   loadLevel(currentLevelIndex)
 
-  // Boucle principale du jeu
   while (true) {
 
+    // 1) Increment the frameCount each loop (which is ~60 times/sec if fg.syncGameLogic(60))
+    frameCount += 1
+
+    // 2) Every 15 frames, advance Mudry's animation
+    if (frameCount % 2 == 0) {
+      // Cycle through all frames in Mudry.frames
+      AnimationIndex = (AnimationIndex + 1) % Mudry.frames.length
+    }
+
     if (!shouldRenderAdvice) {
-      fg.frontBuffer.synchronized{
-        renderWorld(forceRender, playerDirection)
+      fg.frontBuffer.synchronized {
+        // 3) Pass the current AnimationIndex to renderWorld
+        renderWorld(forceRender, playerDirection, AnimationIndex)
       }
     } else {
-      fg.frontBuffer.synchronized{
+      fg.frontBuffer.synchronized {
         renderAdvice()
       }
     }
 
-
-    fg.syncGameLogic(60)
+    // Sync the game logic ~60 times a second
+    fg.syncGameLogic(10)
   }
 
 }
