@@ -4,12 +4,9 @@ import java.awt.event.{KeyAdapter, KeyEvent}
 import javax.swing.SwingConstants
 
 
-
-class EntityRender( var frames: List[String], var scale : Double) {
-  def this(scale: Double) = this(List(), scale)
-}
-
-
+/**
+ * Main object for the ISC Taker game.
+ */
 object Main extends App {
   private var currentLevelIndex: Int = 0
   private var levels: List[Level] = _
