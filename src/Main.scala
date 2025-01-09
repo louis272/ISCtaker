@@ -176,8 +176,18 @@ object Main extends App {
 
   // Audio
   private val gameMusic = new Audio("res/sounds/Mittsies-Vitality.wav")
-  private val playerKick = new Audio("res/sounds/kick.wav")
-  private val playerMove = new Audio("res/sounds/move.wav")
+  private val playerMove = new Audio("res/sounds/character_move.wav")
+  private val doorClosedKick = new Audio("res/sounds/door_closed_kick.wav")
+  private val doorOpening = new Audio("res/sounds/door_opening.wav")
+  private val enemyDie = new Audio("res/sounds/enemy_die.wav")
+  private val enemyKick = new Audio("res/sounds/enemy_kick.wav")
+  private val keyPickUp = new Audio("res/sounds/key_pick_up.wav")
+  private val playerDeath = new Audio("res/sounds/player_death.wav")
+  private val screenChanger = new Audio("res/sounds/screen_changer.wav")
+  private val spikesDamage = new Audio("res/sounds/spikes_damage.wav")
+  private val stoneKick = new Audio("res/sounds/stone_kick.wav")
+  private val stoneMove = new Audio("res/sounds/stone_move.wav")
+
 
   // Création de la fenêtre graphique
   private val fg = new FunGraphics(screenWidth, screenHeight, "ISC TAKER")
@@ -270,10 +280,12 @@ object Main extends App {
       if (world(newX)(newY) == K) {
         level.hasKey = true
         println("Clé récupérée !")
+        keyPickUp.play()
       }
       // Vérifie si on marche sur un piège "vivant" (1)
       if (trapWorld(newX)(newY) == -1) {
         println("Ouch! Piège actif : vous perdez un déplacement supplémentaire.")
+        spikesDamage.play()
         level.currentMoves += 1 // Pénalité
       }
 
@@ -284,9 +296,15 @@ object Main extends App {
       // Inverse l'état des pièges après chaque déplacement
       toggleTraps(level)
 
+    } else if (world(newX)(newY) == C && !level.hasKey) {
+      // Si on tente d'ouvrir une porte sans clé
+      println("Porte fermée !")
+      doorClosedKick.play()
+
     } else if (world(newX)(newY) == C && level.hasKey) {
-      // Ouvrir le coffre si on a la clé
-      println("Coffre ouvert !")
+      // Ouvrir la porte si on a la clé
+      println("Porte ouverte !")
+      doorOpening.play()
       destroyEntity(newX, newY)
 
     } else if (world(newX)(newY) == S) {
@@ -294,8 +312,7 @@ object Main extends App {
       val entityNewX = newX + dx
       val entityNewY = newY + dy
 
-      playerKick.play()
-
+      enemyKick.play()
       Kicking = true
 
       // Vérifie si la position cible est dans les limites du tableau
@@ -303,6 +320,7 @@ object Main extends App {
         // S'il y a un mur ou un rocher à l'endroit où on veut pousser le squelette, on le détruit.
         if (world(entityNewX)(entityNewY) == W || world(entityNewX)(entityNewY) == R) {
           println("Squelette détruit !")
+          enemyDie.play()
           destroyEntity(newX, newY)
         }
         // Sinon, s'il n'y a rien ou bien un piège, on déplace le squelette
@@ -318,8 +336,7 @@ object Main extends App {
       val entityNewX = newX + dx
       val entityNewY = newY + dy
 
-      playerKick.play()
-
+      stoneKick.play()
       Kicking = true
 
       // Vérifie si le rocher peut être poussé
@@ -337,6 +354,7 @@ object Main extends App {
           // S'il n'y a rien ou un piège, on peut pousser
           case _ =>
             moveEntity(newX, newY, entityNewX, entityNewY)
+            stoneMove.play()
             level.currentMoves += 1
             toggleTraps(level)
         }
