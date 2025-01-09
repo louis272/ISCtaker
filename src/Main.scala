@@ -159,6 +159,7 @@ object Main extends App {
   private val spikeUpPath          = "/res/spikeup.png"
   private val spikeDownPath        = "/res/spikedown.png"
   private val transitionScreenPath = "/res/transition.png"
+  private val tutoScreenPath       = "/res/Tuto.png"
 
   // Dimensions
   private val screenWidth  = 900
@@ -643,15 +644,13 @@ object Main extends App {
    * Renders the advice screen with game instructions.
    */
   private def renderAdvice(): Unit = {
-    fg.setColor(Color.BLACK)
-    fg.drawFillRect(50,50,800,400)
-    fg.setColor(Color.WHITE)
-    fg.drawString(70,100,"ISC TAKER",Color.WHITE,50)
-    fg.drawString(70,150,"Déplacez-vous avec les touches fléchées.",Color.WHITE,20)
-    fg.drawString(70,200,"Récupérez la clé pour ouvrir le coffre.",Color.WHITE,20)
-    fg.drawString(70,250,"Poussez les rochers pour les déplacer.",Color.WHITE,20)
-    fg.drawString(70,300,"Evitez les squelettes et les pièges.",Color.WHITE,20)
-    fg.drawString(70,350,"Atteignez la case G pour terminer le niveau.",Color.WHITE,20)
+    fg.drawTransformedPicture(
+      posX   = screenWidth / 2,
+      posY   = screenHeight / 2,
+      angle  = 0.0,
+      scale  = 1,
+      imageName = tutoScreenPath
+    )
   }
 
   private def renderTransition(): Unit = {
