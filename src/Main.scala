@@ -5,7 +5,6 @@ import javax.swing.SwingConstants
 
 
 
-
 class EntityRender( var frames: List[String], var scale : Double) {
   def this(scale: Double) = this(List(), scale)
 }
@@ -208,7 +207,7 @@ object Main extends App {
 
   private var playerDirection: Boolean = false
   private var shouldRenderAdvice: Boolean = false
-
+  private var shouldRenderTransition: Boolean = false
 
 
   // Initialisation de la liste des niveaux
@@ -639,6 +638,14 @@ object Main extends App {
     if (goalAdjacent) {
       currentLevelIndex += 1
       if (currentLevelIndex < levels.length) {
+
+        // Affiche l'écran de transition
+        screenChanger.play()
+        shouldRenderTransition = true
+        // Attendre 2 secondes avant de charger le prochain niveau
+        Thread.sleep(2000)
+        shouldRenderTransition = false
+
         loadLevel(currentLevelIndex)
       } else {
         println("Félicitations ! Vous avez terminé tous les niveaux !")
@@ -661,6 +668,16 @@ object Main extends App {
     fg.drawString(70,250,"Poussez les rochers pour les déplacer.",Color.WHITE,20)
     fg.drawString(70,300,"Evitez les squelettes et les pièges.",Color.WHITE,20)
     fg.drawString(70,350,"Atteignez la case G pour terminer le niveau.",Color.WHITE,20)
+  }
+
+  private def renderTransition(): Unit = {
+    fg.drawTransformedPicture(
+      posX   = screenWidth / 2,
+      posY   = screenHeight / 2,
+      angle  = 0.0,
+      scale  = 1,
+      imageName = transitionScreenPath
+    )
   }
 
 
@@ -703,7 +720,11 @@ object Main extends App {
       AnimationIndex = (AnimationIndex + 1) % Mudry.frames.length
     }
 
-    if (!shouldRenderAdvice) {
+    if (shouldRenderTransition) {
+      fg.frontBuffer.synchronized {
+        renderTransition()
+      }
+    } else if (!shouldRenderAdvice) {
       fg.frontBuffer.synchronized {
         // 3) Pass the current AnimationIndex to renderWorld
         renderWorld(playerDirection, AnimationIndex)
@@ -713,6 +734,7 @@ object Main extends App {
         renderAdvice()
       }
     }
+
 
     // Sync the game logic ~60 times a second
     fg.syncGameLogic(10)
