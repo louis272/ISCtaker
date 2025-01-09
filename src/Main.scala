@@ -206,7 +206,6 @@ object Main extends App {
   // Position initiale du joueur
   private var playerPos: (Int, Int) = (0, 0)
 
-  private var forceRender: Boolean = false
   private var playerDirection: Boolean = false
   private var shouldRenderAdvice: Boolean = false
 
@@ -428,7 +427,7 @@ object Main extends App {
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
    */
-  def renderWorld(forceRender: Boolean,direction:Boolean,AnimationIndex:Int): Unit = {
+  def renderWorld(direction:Boolean,AnimationIndex:Int): Unit = {
     val level = levels(currentLevelIndex)
     val movesLeft = math.max(0, level.maxMoves - level.currentMoves)
 
@@ -670,17 +669,17 @@ object Main extends App {
     override def keyPressed(e: KeyEvent): Unit = {
       e.getKeyCode match {
         case KeyEvent.VK_UP     => handlePlayerInput(0, -1)
-          forceRender = false; playerDirection = false
+          playerDirection = false
         case KeyEvent.VK_DOWN   => handlePlayerInput(0, 1)
-          forceRender = false; playerDirection = false
+          playerDirection = false
         case KeyEvent.VK_LEFT   => handlePlayerInput(-1, 0)
-          forceRender = false; playerDirection = true
+          playerDirection = true
         case KeyEvent.VK_RIGHT  => handlePlayerInput(1, 0)
-          forceRender = false; playerDirection = false
+          playerDirection = false
         case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Réinitialise le niveau
-          forceRender = false; playerDirection = false
+          playerDirection = false
         case KeyEvent.VK_L      => shouldRenderAdvice = true // Affiche les conseils
-        case KeyEvent.VK_ESCAPE => shouldRenderAdvice = false; forceRender = true // Cache les conseils
+        case KeyEvent.VK_ESCAPE => shouldRenderAdvice = false // Cache les conseils
         case _                  => // Aucune action pour les autres touches
       }
     }
@@ -707,7 +706,7 @@ object Main extends App {
     if (!shouldRenderAdvice) {
       fg.frontBuffer.synchronized {
         // 3) Pass the current AnimationIndex to renderWorld
-        renderWorld(forceRender, playerDirection, AnimationIndex)
+        renderWorld(playerDirection, AnimationIndex)
       }
     } else {
       fg.frontBuffer.synchronized {
