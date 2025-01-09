@@ -175,9 +175,9 @@ object Main extends App {
   private val tileSize = 47
 
   // Audio
-  private val gameMusic = new Audio("res/Mittsies-Vitality.wav")
-  private val playerKick = new Audio("res/kick.wav")
-  private val playerMove = new Audio("res/move.wav")
+  private val gameMusic = new Audio("res/sounds/Mittsies-Vitality.wav")
+  private val playerKick = new Audio("res/sounds/kick.wav")
+  private val playerMove = new Audio("res/sounds/move.wav")
 
   // Création de la fenêtre graphique
   private val fg = new FunGraphics(screenWidth, screenHeight, "ISC TAKER")
