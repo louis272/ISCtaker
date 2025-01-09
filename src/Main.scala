@@ -3,12 +3,7 @@ import java.awt.{Color, Font}
 import java.awt.event.{KeyAdapter, KeyEvent}
 import javax.swing.SwingConstants
 
-/**
- * Représente un niveau du jeu.
- *
- * @param grid Grille du niveau, sous forme de tableau 2D d'entiers (chaque entier représente un type d'entité).
- * @param maxMoves Nombre maximum de déplacements autorisés dans ce niveau.
- */
+
 
 
 class EntityRender( var frames: List[String], var scale : Double) {
@@ -604,13 +599,6 @@ object Main extends App {
     // Finally, update the number of moves left on screen only if it changed
 
       // Clear the old text region. For example, assume we show it near top-left:
-
-
-
-
-
-
-
 
 
   }
