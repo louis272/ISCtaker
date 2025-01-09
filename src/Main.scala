@@ -145,8 +145,6 @@ object Main extends App {
   )
 
 
-
-
   // New arrays for storing the previous frame’s state
   private var oldWorld: Array[Array[Int]] = _
   private var oldTrapWorld: Array[Array[Int]] = _
@@ -154,37 +152,33 @@ object Main extends App {
   // Keep track of the previous frame’s “moves left” to redraw only if changed
   private var oldMovesLeft: Int = -1
 
-  private val playerImagePath = "/res/Mudry.png"
-  private val playerImagePathFlipped = "/res/MudryFlipped.png"
-
-  private val skeletonPath = "/res/skeleton.png"
-  private val rockPath = "/res/rock.png"
-
-  private val keyPath = "/res/key.png"
-  private val chestPath = "/res/chest.png"
-  private val spikeUpPath = "/res/spikeup.png"
-  private val spikeDownPath = "/res/spikedown.png"
-
+  // Paths to the images
+  private val rockPath             = "/res/rock.png"
+  private val keyPath              = "/res/key.png"
+  private val chestPath            = "/res/chest.png"
+  private val spikeUpPath          = "/res/spikeup.png"
+  private val spikeDownPath        = "/res/spikedown.png"
   private val transitionScreenPath = "/res/transition.png"
+  private val tutoScreenPath       = "/res/Tuto.png"
 
-  private val screenWidth = 900
+  // Dimensions
+  private val screenWidth  = 900
   private val screenHeight = 563
-
-  private val tileSize = 47
+  private val tileSize     = 47
 
   // Audio
-  private val gameMusic = new Audio("res/sounds/Mittsies-Vitality.wav")
-  private val playerMove = new Audio("res/sounds/character_move.wav")
+  private val gameMusic      = new Audio("res/sounds/Mittsies-Vitality.wav")
+  private val playerMove     = new Audio("res/sounds/character_move.wav")
   private val doorClosedKick = new Audio("res/sounds/door_closed_kick.wav")
-  private val doorOpening = new Audio("res/sounds/door_opening.wav")
-  private val enemyDie = new Audio("res/sounds/enemy_die.wav")
-  private val enemyKick = new Audio("res/sounds/enemy_kick.wav")
-  private val keyPickUp = new Audio("res/sounds/key_pick_up.wav")
-  private val playerDeath = new Audio("res/sounds/player_death.wav")
-  private val screenChanger = new Audio("res/sounds/screen_changer.wav")
-  private val spikesDamage = new Audio("res/sounds/spikes_damage.wav")
-  private val stoneKick = new Audio("res/sounds/stone_kick.wav")
-  private val stoneMove = new Audio("res/sounds/stone_move.wav")
+  private val doorOpening    = new Audio("res/sounds/door_opening.wav")
+  private val enemyDie       = new Audio("res/sounds/enemy_die.wav")
+  private val enemyKick      = new Audio("res/sounds/enemy_kick.wav")
+  private val keyPickUp      = new Audio("res/sounds/key_pick_up.wav")
+  private val playerDeath    = new Audio("res/sounds/player_death.wav")
+  private val screenChanger  = new Audio("res/sounds/screen_changer.wav")
+  private val spikesDamage   = new Audio("res/sounds/spikes_damage.wav")
+  private val stoneKick      = new Audio("res/sounds/stone_kick.wav")
+  private val stoneMove      = new Audio("res/sounds/stone_move.wav")
 
 
   // Création de la fenêtre graphique
@@ -411,16 +405,6 @@ object Main extends App {
       world(x)(y) != C     // Bloqué par un coffre fermé
   }
 
-
-  private def arraysEqual2D(a: Array[Array[Int]], b: Array[Array[Int]]): Boolean = {
-    if (a.length != b.length) return false
-    for (i <- a.indices) {
-      if (a(i).length != b(i).length) return false
-      if (!a(i).sameElements(b(i))) return false
-    }
-    true
-  }
-
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
    */
@@ -438,8 +422,6 @@ object Main extends App {
         scale  = 1,
         imageName = level.backgroundPath
       )
-
-
 
       if(currentLevelIndex!= levels.length -1) {
         fg.setColor(Color.BLACK)
@@ -463,8 +445,8 @@ object Main extends App {
           outlineColor = Color.BLACK,
           outlineThickness = 20)
       }
-      for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
 
+      for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
         // 2) Re-draw the trap if needed
         if (trapWorld(i)(j) == 1) {
           if(!level.movableSpikes){
@@ -475,8 +457,7 @@ object Main extends App {
               scale  = 0.1,
               imageName = spikeDownPath
             )
-          }
-          else{
+          } else{
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
               posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -485,8 +466,7 @@ object Main extends App {
               imageName = spikeUpPath
             )
           }
-        }
-        else if (trapWorld(i)(j) == -1) {
+        } else if (trapWorld(i)(j) == -1) {
           if(!level.movableSpikes) {
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
@@ -495,8 +475,7 @@ object Main extends App {
               scale  = 0.1,
               imageName = spikeUpPath
             )
-          }
-          else{
+          } else{
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
               posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -506,7 +485,6 @@ object Main extends App {
             )
           }
         }
-
 
         // 3) Re-draw the actual entity
         world(i)(j) match {
@@ -543,8 +521,7 @@ object Main extends App {
                 if(AnimationIndex == 3){
                   Kicking = false
                 }
-              }
-              else{
+              } else{
                 fg.drawTransformedPicture(
                   posX   = level.offsetX + i * tileSize + tileSize / 2,
                   posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -553,8 +530,7 @@ object Main extends App {
                   imageName = MudryFlipped.frames(AnimationIndex)
                 )
               }
-            }
-            else{
+            } else{
               if(Kicking){
                 fg.drawTransformedPicture(
                   posX   = level.offsetX + i * tileSize + tileSize / 2,
@@ -566,8 +542,7 @@ object Main extends App {
                 if(AnimationIndex == 3){
                   Kicking = false
                 }
-              }
-              else{
+              } else{
                 fg.drawTransformedPicture(
                   posX   = level.offsetX + i * tileSize + tileSize / 2,
                   posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -577,9 +552,7 @@ object Main extends App {
                 )
               }
             }
-
-          case W =>
-
+          case W => // Nothing to draw for walls
           case G =>
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
@@ -631,14 +604,6 @@ object Main extends App {
     } catch {
       case e: Exception => // Ignore
     }
-    // Loop through the grid
-
-
-    // Finally, update the number of moves left on screen only if it changed
-
-      // Clear the old text region. For example, assume we show it near top-left:
-
-
   }
 
   /**
@@ -679,15 +644,13 @@ object Main extends App {
    * Renders the advice screen with game instructions.
    */
   private def renderAdvice(): Unit = {
-    fg.setColor(Color.BLACK)
-    fg.drawFillRect(50,50,800,400)
-    fg.setColor(Color.WHITE)
-    fg.drawString(70,100,"ISC TAKER",Color.WHITE,50)
-    fg.drawString(70,150,"Déplacez-vous avec les touches fléchées.",Color.WHITE,20)
-    fg.drawString(70,200,"Récupérez la clé pour ouvrir le coffre.",Color.WHITE,20)
-    fg.drawString(70,250,"Poussez les rochers pour les déplacer.",Color.WHITE,20)
-    fg.drawString(70,300,"Evitez les squelettes et les pièges.",Color.WHITE,20)
-    fg.drawString(70,350,"Atteignez la case G pour terminer le niveau.",Color.WHITE,20)
+    fg.drawTransformedPicture(
+      posX   = screenWidth / 2,
+      posY   = screenHeight / 2,
+      angle  = 0.0,
+      scale  = 1,
+      imageName = tutoScreenPath
+    )
   }
 
   private def renderTransition(): Unit = {
@@ -765,7 +728,6 @@ object Main extends App {
     if (!gameMusic.audioClip.isRunning) {
       gameMusic.play()
     }
-
 
     // Sync the game logic ~60 times a second
     fg.syncGameLogic(10)
