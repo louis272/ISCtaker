@@ -169,6 +169,8 @@ object Main extends App {
   private val spikeUpPath = "/res/spikeup.png"
   private val spikeDownPath = "/res/spikedown.png"
 
+  private val transitionScreenPath = "/res/transition.png"
+
   private val screenWidth = 900
   private val screenHeight = 563
 
