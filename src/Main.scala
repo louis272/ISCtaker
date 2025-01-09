@@ -717,6 +717,13 @@ object Main extends App {
           playerDirection = false; playerDeath.play()
         case KeyEvent.VK_L      => shouldRenderAdvice = true // Affiche les conseils
         case KeyEvent.VK_ESCAPE => shouldRenderAdvice = false // Cache les conseils
+        case KeyEvent.VK_0      => currentLevelIndex = 0; loadLevel(currentLevelIndex) // Charge le niveau 0
+        case KeyEvent.VK_1      => currentLevelIndex = 1; loadLevel(currentLevelIndex) // Charge le niveau 1
+        case KeyEvent.VK_2      => currentLevelIndex = 2; loadLevel(currentLevelIndex) // Charge le niveau 2
+        case KeyEvent.VK_3      => currentLevelIndex = 3; loadLevel(currentLevelIndex) // Charge le niveau 3
+        case KeyEvent.VK_4      => currentLevelIndex = 4; loadLevel(currentLevelIndex) // Charge le niveau 4
+        case KeyEvent.VK_5      => currentLevelIndex = 5; loadLevel(currentLevelIndex) // Charge le niveau 5
+        case KeyEvent.VK_6      => currentLevelIndex = 6; loadLevel(currentLevelIndex) // Charge le niveau 6
         case _                  => // Aucune action pour les autres touches
       }
     }
@@ -753,6 +760,10 @@ object Main extends App {
       fg.frontBuffer.synchronized {
         renderAdvice()
       }
+    }
+
+    if (!gameMusic.audioClip.isRunning) {
+      gameMusic.play()
     }
 
 
