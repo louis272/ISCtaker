@@ -19,6 +19,7 @@ class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val m
 object Level {
   def initializeLevels(screenWidth: Int, gridWidth: Int, tileSize: Int): List[Level] = {
     List(
+      // Level 1
       new Level(
         Array( // Un level du vrai jeu, vraiment chiant à recopier si on veut en faire plus
           Array(W, W, W, W, W, W, W, W),
@@ -45,6 +46,8 @@ object Level {
         )
         ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,Pandemonica, "/res/level 1.png",
       ),
+
+      // Level 2
       new Level(
         Array(
           Array(W, W, W, W, W, W, W, W),
@@ -72,6 +75,8 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0, 0)
         ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,Pandemonica, "/res/level 2.png"
       ),
+
+      // Level 3
       new Level(
         Array(
           Array(W, W, W, W, W, W, W, W, W),
@@ -100,6 +105,8 @@ object Level {
 
         ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,Pandemonica, "/res/level 3.png"
       ) ,
+
+      // Level 4
       new Level(
         Array(
           Array(W, W, W, W, W, W, W),
@@ -127,6 +134,8 @@ object Level {
 
         ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,Pandemonica, "/res/level 4.png"
       ),
+
+      // Level 5
       new Level(
         Array(
           Array(W, W, W, W, W, W, W, W, W, W),

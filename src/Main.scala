@@ -99,6 +99,7 @@ object Main extends App {
   private val tileSize = 47
 
   private val gameMusic = new Audio("res/Mittsies-Vitality.wav")
+  private val playerKick = new Audio("res/kick.wav")
 
   // Création de la fenêtre graphique
   private val fg = new FunGraphics(screenWidth, screenHeight, "ISC TAKER")
@@ -215,6 +216,8 @@ object Main extends App {
       val entityNewX = newX + dx
       val entityNewY = newY + dy
 
+      playerKick.play()
+
       // Vérifie si la position cible est dans les limites du tableau
       if (entityNewX >= 0 && entityNewX < gridWidth && entityNewY >= 0 && entityNewY < gridHeight) {
         // S'il y a un mur ou un rocher à l'endroit où on veut pousser le squelette, on le détruit.
@@ -234,6 +237,8 @@ object Main extends App {
       // Gestion du déplacement des rochers
       val entityNewX = newX + dx
       val entityNewY = newY + dy
+
+      playerKick.play()
 
       // Vérifie si le rocher peut être poussé
       if (entityNewX < 0 || entityNewX >= gridWidth || entityNewY < 0 || entityNewY >= gridHeight) {
@@ -326,7 +331,7 @@ object Main extends App {
 
     fg.displayFPS(true)
 
-    if(true || forceRender) {
+    try {
       fg.drawTransformedPicture(
         posX   = screenWidth / 2,
         posY   = screenHeight / 2,
@@ -474,6 +479,8 @@ object Main extends App {
         oldTrapWorld(i)(j) = trapWorld(i)(j)
       }
 
+    } catch {
+      case e: Exception => // Ignore
     }
     // Loop through the grid
 
