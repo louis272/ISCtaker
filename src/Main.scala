@@ -27,6 +27,7 @@ object Main extends App {
   private var frameCount: Int = 0
 
   private var AnimationIndex: Int = 0
+  var Kicking: Boolean = false
 
   var Mudry: EntityRender = new EntityRender(
     List(
@@ -38,12 +39,34 @@ object Main extends App {
     0.7
   )
 
+  var MudryFlipped: EntityRender = new EntityRender(
+    List(
+      "/res/Mudry Idle F.png",
+      "/res/Mudry Left F.png",
+      "/res/Mudry Idle F.png",
+      "/res/Mudry Right F.png",
+    ),
+    0.7
+  )
+
+
+
   var MudryKick : EntityRender = new EntityRender(
     List(
       "/res/Mudry Kick - frame 1.png",
       "/res/Mudry Kick - frame 2.png",
       "/res/Mudry Kick - frame 3.png",
       "/res/Mudry Kick - frame 4.png",
+    ),
+    0.7
+  )
+
+  var MudryKickFlipped : EntityRender = new EntityRender(
+    List(
+      "/res/Mudry Kick frame 1 F.png",
+      "/res/Mudry Kick frame 2 F.png",
+      "/res/Mudry Kick frame 3 F.png",
+      "/res/Mudry Kick frame 4 F.png",
     ),
     0.7
   )
@@ -58,10 +81,68 @@ object Main extends App {
     0.6
   )
 
+
+
   var Modeus : EntityRender = new EntityRender(
-    List(),
+    List(
+      "/res/Modeus Idle.gif",
+      "/res/Modeus Left.gif",
+      "/res/Modeus Idle.gif",
+      "/res/Modeus Right.gif",
+    ),
     0.6
 )
+
+  var Cerberus : EntityRender = new EntityRender(
+    List(
+      "/res/Cerberus Idle.gif",
+      "/res/Cerberus Left.gif",
+      "/res/Cerberus Idle.gif",
+      "/res/Cerberus Right.gif",
+    ),
+    0.6
+  )
+
+  var Justice : EntityRender = new EntityRender(
+    List(
+      "/res/Justice Idle.gif",
+      "/res/Justice Left.gif",
+      "/res/Justice Idle.gif",
+      "/res/Justice Right.gif",
+    ),
+    0.6
+  )
+
+  var Azazel : EntityRender = new EntityRender(
+    List(
+      "/res/Azazel Idle.gif",
+      "/res/Azazel Left.gif",
+      "/res/Azazel Idle.gif",
+      "/res/Azazel Right.gif",
+    ),
+    0.6
+  )
+
+  var Zdrada : EntityRender = new EntityRender(
+    List(
+      "/res/Zdrada Idle.gif",
+      "/res/Zdrada Left.gif",
+      "/res/Zdrada Idle.gif",
+      "/res/Zdrada Right.gif",
+    ),
+    0.6
+  )
+
+  var Malina : EntityRender = new EntityRender(
+    List(
+      "/res/Malina Idle.gif",
+      "/res/Malina Left.gif",
+      "/res/Malina Idle.gif",
+      "/res/Malina Right.gif",
+    ),
+    0.6
+  )
+
   var Skeleton : EntityRender = new EntityRender(
     List(
       "/res/skeleton - Idle.gif",
@@ -215,6 +296,8 @@ object Main extends App {
       val entityNewX = newX + dx
       val entityNewY = newY + dy
 
+      Kicking = true
+
       // Vérifie si la position cible est dans les limites du tableau
       if (entityNewX >= 0 && entityNewX < gridWidth && entityNewY >= 0 && entityNewY < gridHeight) {
         // S'il y a un mur ou un rocher à l'endroit où on veut pousser le squelette, on le détruit.
@@ -234,6 +317,8 @@ object Main extends App {
       // Gestion du déplacement des rochers
       val entityNewX = newX + dx
       val entityNewY = newY + dy
+
+      Kicking = true
 
       // Vérifie si le rocher peut être poussé
       if (entityNewX < 0 || entityNewX >= gridWidth || entityNewY < 0 || entityNewY >= gridHeight) {
@@ -406,22 +491,50 @@ object Main extends App {
         world(i)(j) match {
           case P =>
             if(direction){
-              fg.drawTransformedPicture(
-                posX   = level.offsetX + i * tileSize + tileSize / 2,
-                posY   = level.offsetY + j * tileSize + tileSize / 2,
-                angle  = 0.0,
-                scale  = Mudry.scale,
-                imageName = Mudry.frames(AnimationIndex)
-              )
+              if(Kicking){
+                fg.drawTransformedPicture(
+                  posX   = level.offsetX + i * tileSize + tileSize / 2,
+                  posY   = level.offsetY + j * tileSize + tileSize / 2,
+                  angle  = 0.0,
+                  scale  = MudryKickFlipped.scale,
+                  imageName = MudryKickFlipped.frames(AnimationIndex)
+                )
+                if(AnimationIndex == 3){
+                  Kicking = false
+                }
+              }
+              else{
+                fg.drawTransformedPicture(
+                  posX   = level.offsetX + i * tileSize + tileSize / 2,
+                  posY   = level.offsetY + j * tileSize + tileSize / 2,
+                  angle  = 0.0,
+                  scale  = MudryFlipped.scale,
+                  imageName = MudryFlipped.frames(AnimationIndex)
+                )
+              }
             }
             else{
-              fg.drawTransformedPicture(
-                posX   = level.offsetX + i * tileSize + tileSize / 2,
-                posY   = level.offsetY + j * tileSize + tileSize / 2,
-                angle  = 0.0,
-                scale  = 0.7,
-                imageName = playerImagePath
-              )
+              if(Kicking){
+                fg.drawTransformedPicture(
+                  posX   = level.offsetX + i * tileSize + tileSize / 2,
+                  posY   = level.offsetY + j * tileSize + tileSize / 2,
+                  angle  = 0.0,
+                  scale  = MudryKick.scale,
+                  imageName = MudryKick.frames(AnimationIndex)
+                )
+                if(AnimationIndex == 3){
+                  Kicking = false
+                }
+              }
+              else{
+                fg.drawTransformedPicture(
+                  posX   = level.offsetX + i * tileSize + tileSize / 2,
+                  posY   = level.offsetY + j * tileSize + tileSize / 2,
+                  angle  = 0.0,
+                  scale  = Mudry.scale,
+                  imageName = Mudry.frames(AnimationIndex)
+                )
+              }
             }
 
           case W =>
