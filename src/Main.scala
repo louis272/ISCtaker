@@ -263,6 +263,7 @@ object Main extends App {
     // Vérifie si le joueur a déjà épuisé tous ses déplacements
     if (level.currentMoves >= level.maxMoves) {
       println("Mouvements épuisés ! Redémarrage du niveau.")
+      playerDeath.play()
       loadLevel(currentLevelIndex)
       return
     }
@@ -691,7 +692,7 @@ object Main extends App {
         case KeyEvent.VK_RIGHT  => handlePlayerInput(1, 0)
           playerDirection = false
         case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Réinitialise le niveau
-          playerDirection = false
+          playerDirection = false; playerDeath.play()
         case KeyEvent.VK_L      => shouldRenderAdvice = true // Affiche les conseils
         case KeyEvent.VK_ESCAPE => shouldRenderAdvice = false // Cache les conseils
         case _                  => // Aucune action pour les autres touches
