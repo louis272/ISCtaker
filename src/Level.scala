@@ -159,18 +159,27 @@ object Level {
         ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,Zdrada, "/res/level 5.png",
       ),
 
-      // Level 6
+      // Credits
       new Level(
 
         Array(
-          Array(W, W, W, W, W, W, W, W, W, W, W, W, W, W, W),
+          Array(W,W,W,W,W),
+          Array(W,0,W,0,W),
+          Array(W,W,P,W,W),
+          Array(W,0,W,0,W),
+          Array(W,W,W,W,W)
 
         ),
         Array(
-          Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+          Array(0,0,0,0,0),
+          Array(0,0,0,0,0),
+          Array(0,0,0,0,0),
+          Array(0,0,0,0,0),
+          Array(0,0,0,0,0)
+
         )
 
-        , 43, true, (screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10, Zdrada, "/res/level 6.png"
+        , 43, false, (screenWidth - (gridWidth * tileSize)) / 2 , 200, Zdrada, "/res/EndScreen.png"
 
 
       )
