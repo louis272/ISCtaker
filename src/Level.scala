@@ -1,4 +1,4 @@
-import Main.{C, G, K, P, Pandemonica, R, S, W}
+import Main.{C, Cerberus, G, K, Malina, Modeus, P, Pandemonica, R, S, W, Zdrada}
 
 /**
  * Représente un niveau du jeu.
@@ -73,7 +73,7 @@ object Level {
           Array(0, 0, 0,-1,-1, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0)
-        ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,Pandemonica, "/res/level 2.png"
+        ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,Modeus, "/res/level 2.png"
       ),
 
       // Level 3
@@ -103,7 +103,7 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-        ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,Pandemonica, "/res/level 3.png"
+        ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,Cerberus, "/res/level 3.png"
       ) ,
 
       // Level 4
@@ -132,7 +132,7 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0)
 
-        ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,Pandemonica, "/res/level 4.png"
+        ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,Malina, "/res/level 4.png"
       ),
 
       // Level 5
@@ -156,7 +156,7 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0,-1, 0,-1, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-        ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,Pandemonica, "/res/level 5.png"
+        ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,Zdrada, "/res/level 5.png"
       )
     )
   }
