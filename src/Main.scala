@@ -28,7 +28,7 @@ object Main extends App {
 
   private var AnimationIndex: Int = 0
 
-  private var Mudry: EntityRender = new EntityRender(
+  var Mudry: EntityRender = new EntityRender(
     List(
       "/res/Mudry - Idle.png",
       "/res/Mudry - Left.png",
@@ -38,7 +38,7 @@ object Main extends App {
     0.7
   )
 
-  private var MudryKick : EntityRender = new EntityRender(
+  var MudryKick : EntityRender = new EntityRender(
     List(
       "/res/Mudry Kick - frame 1.png",
       "/res/Mudry Kick - frame 2.png",
@@ -48,7 +48,7 @@ object Main extends App {
     0.7
   )
 
-  private var Pandemonica : EntityRender = new EntityRender(
+  var Pandemonica : EntityRender = new EntityRender(
     List(
       "/res/Pandemonica - Idle.gif",
       "/res/Pandemonica - Left.gif",
@@ -58,11 +58,11 @@ object Main extends App {
     0.6
   )
 
-  private var Modeus : EntityRender = new EntityRender(
+  var Modeus : EntityRender = new EntityRender(
     List(),
     0.6
 )
-  private var Skeleton : EntityRender = new EntityRender(
+  var Skeleton : EntityRender = new EntityRender(
     List(
       "/res/skeleton - Idle.gif",
       "/res/skeleton - Left.gif",

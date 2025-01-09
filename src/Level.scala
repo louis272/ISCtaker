@@ -1,4 +1,4 @@
-import Main.{W, P, R, S, G, C, K}
+import Main.{C, G, K, P, Pandemonica, R, S, W}
 
 /**
  * Représente un niveau du jeu.
@@ -6,7 +6,7 @@ import Main.{W, P, R, S, G, C, K}
  * @param grid Grille du niveau, sous forme de tableau 2D d'entiers (chaque entier représente un type d'entité).
  * @param maxMoves Nombre maximum de déplacements autorisés dans ce niveau.
  */
-class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val maxMoves: Int, val movableSpikes: Boolean = false, val offsetX:Int, val offsetY:Int, val demonPath: String, val backgroundPath: String = "") {
+class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val maxMoves: Int, val movableSpikes: Boolean = false, val offsetX:Int, val offsetY:Int, val Demon: EntityRender, val backgroundPath: String = "") {
   val gridWidth: Int = grid.length
   val gridHeight: Int = grid(0).length
   var currentMoves: Int = 0
@@ -43,7 +43,7 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0)
         )
-        ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,"/res/Pandemonia.gif", "/res/level 1.png",
+        ,22 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 90,75,Pandemonica, "/res/level 1.png",
       ),
       new Level(
         Array(
@@ -70,7 +70,7 @@ object Level {
           Array(0, 0, 0,-1,-1, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0)
-        ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,"/res/Modeus.gif", "/res/level 2.png"
+        ), 22 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 95,85,Pandemonica, "/res/level 2.png"
       ),
       new Level(
         Array(
@@ -98,7 +98,7 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-        ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,"/res/Cerberus.gif", "/res/level 3.png"
+        ), 31 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,65,Pandemonica, "/res/level 3.png"
       ) ,
       new Level(
         Array(
@@ -125,7 +125,7 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0)
 
-        ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,"/res/Malina.gif", "/res/level 4.png"
+        ), 23 ,false,(screenWidth - (gridWidth * tileSize)) / 2 - 117,110,Pandemonica, "/res/level 4.png"
       ),
       new Level(
         Array(
@@ -147,7 +147,7 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0,-1, 0,-1, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-        ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,"/res/Zdrada.gif", "/res/level 5.png"
+        ), 23 ,true,(screenWidth - (gridWidth * tileSize)) / 2 - 70 , 10,Pandemonica, "/res/level 5.png"
       )
     )
   }
