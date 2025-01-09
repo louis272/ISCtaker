@@ -439,28 +439,30 @@ object Main extends App {
         imageName = level.backgroundPath
       )
 
-      fg.setColor(Color.BLACK)
-      fg.drawFillRect(50,380,100,60)
 
-      // Now draw the new text
-      fg.setColor(Color.WHITE)
-      fg.drawFancyString(
-        posX    = 70,
-        posY    = 425,
-        str = s"$movesLeft",
-        fontFamily = "Arial",
-        fontStyle = Font.BOLD,
-        fontSize = 50,
-        color = Color.WHITE,
-        halign =  SwingConstants.LEFT,
-        valign = SwingConstants.BOTTOM,
-        shadowX = 0,
-        shadowY = 0,
-        shadowColor = Color.BLACK,
-        shadowThickness = 10,
-        outlineColor = Color.BLACK,
-        outlineThickness = 20)
 
+      if(currentLevelIndex!= levels.length -1) {
+        fg.setColor(Color.BLACK)
+        fg.drawFillRect(50,380,100,60)
+        // Now draw the new text
+        fg.setColor(Color.WHITE)
+        fg.drawFancyString(
+          posX = 70,
+          posY = 425,
+          str = s"$movesLeft",
+          fontFamily = "Arial",
+          fontStyle = Font.BOLD,
+          fontSize = 50,
+          color = Color.WHITE,
+          halign = SwingConstants.LEFT,
+          valign = SwingConstants.BOTTOM,
+          shadowX = 0,
+          shadowY = 0,
+          shadowColor = Color.BLACK,
+          shadowThickness = 10,
+          outlineColor = Color.BLACK,
+          outlineThickness = 20)
+      }
       for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
 
         // 2) Re-draw the trap if needed
@@ -509,6 +511,26 @@ object Main extends App {
         // 3) Re-draw the actual entity
         world(i)(j) match {
           case P =>
+            if(currentLevelIndex==levels.length - 1){
+              Mudry.scale = 1
+              MudryFlipped.scale = 1
+
+              Mudry.frames = List(
+                "/res/Mudry Idle HQ.png",
+                "/res/Mudry Left HQ.png",
+                "/res/Mudry Idle HQ.png",
+                "/res/Mudry Right HQ.png",
+              )
+
+              MudryFlipped.frames = List(
+                "/res/Mudry Idle HQ F.png",
+                "/res/Mudry Left HQ F.png",
+                "/res/Mudry Idle HQ F.png",
+                "/res/Mudry Right HQ F.png",
+              )
+
+            }
+
             if(direction){
               if(Kicking){
                 fg.drawTransformedPicture(
