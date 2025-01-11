@@ -40,8 +40,6 @@ object Main extends App {
     0.7
   )
 
-
-
   private val MudryKick : EntityRender = new EntityRender(
     List(
       "/res/Mudry Kick - frame 1.png",
@@ -72,8 +70,6 @@ object Main extends App {
     0.6
   )
 
-
-
   var Modeus : EntityRender = new EntityRender(
     List(
       "/res/Modeus Idle.gif",
@@ -82,7 +78,7 @@ object Main extends App {
       "/res/Modeus Right.gif",
     ),
     0.6
-)
+  )
 
   var Cerberus : EntityRender = new EntityRender(
     List(
@@ -195,9 +191,9 @@ object Main extends App {
 
   // Position initiale du joueur
   private var playerPos: (Int, Int) = (0, 0)
+  private var playerDirection: Boolean = false // false = right, true = left
 
-  private var playerDirection: Boolean = false
-  private var shouldRenderAdvice: Boolean = false
+  private var shouldRenderAdvice: Boolean     = false
   private var shouldRenderTransition: Boolean = false
 
 
@@ -424,7 +420,7 @@ object Main extends App {
         imageName = level.backgroundPath
       )
 
-      if(currentLevelIndex!= levels.length -1) {
+      if (currentLevelIndex!= levels.length -1) {
         fg.setColor(Color.BLACK)
         fg.drawFillRect(50,380,100,60)
         // Now draw the new text
@@ -450,7 +446,7 @@ object Main extends App {
       for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
         // 2) Re-draw the trap if needed
         if (trapWorld(i)(j) == 1) {
-          if(!level.movableSpikes){
+          if (!level.movableSpikes) {
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
               posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -458,7 +454,7 @@ object Main extends App {
               scale  = 0.1,
               imageName = spikeDownPath
             )
-          } else{
+          } else {
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
               posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -476,7 +472,7 @@ object Main extends App {
               scale  = 0.1,
               imageName = spikeUpPath
             )
-          } else{
+          } else {
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
               posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -510,8 +506,8 @@ object Main extends App {
 
             }
 
-            if(direction){
-              if(Kicking){
+            if (direction) {
+              if (Kicking) {
                 fg.drawTransformedPicture(
                   posX   = level.offsetX + i * tileSize + tileSize / 2,
                   posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -519,10 +515,10 @@ object Main extends App {
                   scale  = MudryKickFlipped.scale,
                   imageName = MudryKickFlipped.frames(AnimationIndex)
                 )
-                if(AnimationIndex == 3){
+                if (AnimationIndex == 3) {
                   Kicking = false
                 }
-              } else{
+              } else {
                 fg.drawTransformedPicture(
                   posX   = level.offsetX + i * tileSize + tileSize / 2,
                   posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -531,8 +527,8 @@ object Main extends App {
                   imageName = MudryFlipped.frames(AnimationIndex)
                 )
               }
-            } else{
-              if(Kicking){
+            } else {
+              if (Kicking) {
                 fg.drawTransformedPicture(
                   posX   = level.offsetX + i * tileSize + tileSize / 2,
                   posY   = level.offsetY + j * tileSize + tileSize / 2,
@@ -540,10 +536,10 @@ object Main extends App {
                   scale  = MudryKick.scale,
                   imageName = MudryKick.frames(AnimationIndex)
                 )
-                if(AnimationIndex == 3){
+                if (AnimationIndex == 3) {
                   Kicking = false
                 }
-              } else{
+              } else {
                 fg.drawTransformedPicture(
                   posX   = level.offsetX + i * tileSize + tileSize / 2,
                   posY   = level.offsetY + j * tileSize + tileSize / 2,
