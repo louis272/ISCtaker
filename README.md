@@ -1,7 +1,7 @@
 # ISCtaker
 
 ## Overview
-ISCtaker is a Scala-based game where players navigate through various levels, overcoming obstacles and reaching goals. The game features different entities such as demons, skeletons, rocks, chests, and keys, each with unique properties and behaviors.
+ISCtaker is a Scala-based game where players navigate through various levels, overcoming obstacles and reaching goals. The game features different entities such as demons, skeletons, rocks, doors, and keys, each with unique properties and behaviors.
 
 ## Features
 - Multiple levels with increasing difficulty
