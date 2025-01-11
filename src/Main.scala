@@ -186,7 +186,7 @@ object Main extends App {
   val G = 3  // But (Goal)
   val S = 4  // Squelette
   val R = 5  // Rocher
-  val C = 6  // Coffre
+  val C = 6  // Porte
   val K = 8  // Clé
 
   // Position initiale du joueur
@@ -334,7 +334,7 @@ object Main extends App {
       } else {
         // On regarde ce qui se trouve à l'endroit où on souhaite pousser le rocher
         world(entityNewX)(entityNewY) match {
-          // Si la destination est un mur, un rocher ou un coffre, on ne peut pas pousser
+          // Si la destination est un mur, un rocher ou une porte, on ne peut pas pousser
           case W | R | C | S =>
             println("Rocher bloqué par un mur/rocher !")
             level.currentMoves += 1
@@ -355,8 +355,10 @@ object Main extends App {
 
   /**
    * Change l'état de chaque piège : d'actif (-1) à inactif (1) et vice-versa.
+   *
+   * @param level Niveau actuel.
    */
-  private def toggleTraps(level: Level ): Unit = {
+  private def toggleTraps(level: Level): Unit = {
     for (x <- 0 until gridWidth; y <- 0 until gridHeight) {
       if (trapWorld(x)(y) == 1 && level.movableSpikes) trapWorld(x)(y) = -1
       else if (trapWorld(x)(y) == -1 && level.movableSpikes) trapWorld(x)(y) = 1
@@ -365,6 +367,9 @@ object Main extends App {
 
   /**
    * Déplace le joueur vers de nouvelles coordonnées (newX, newY).
+   *
+   * @param newX Nouvelle position en X.
+   * @param newY Nouvelle position en Y.
    */
   private def movePlayer(newX: Int, newY: Int): Unit = {
     val (x, y) = playerPos
@@ -376,6 +381,11 @@ object Main extends App {
 
   /**
    * Déplace une entité quelconque (squelette, rocher, etc.) vers de nouvelles coordonnées.
+   *
+   * @param oldX Ancienne position en X.
+   * @param oldY Ancienne position en Y.
+   * @param newX Nouvelle position en X.
+   * @param newY Nouvelle position en Y.
    */
   private def moveEntity(oldX: Int, oldY: Int, newX: Int, newY: Int): Unit = {
     val entity = world(oldX)(oldY)
@@ -385,6 +395,9 @@ object Main extends App {
 
   /**
    * Détruit (supprime) une entité sur la grille.
+   *
+   * @param x Position en X.
+   * @param y Position en Y.
    */
   private def destroyEntity(x: Int, y: Int): Unit = {
     world(x)(y) = 0
@@ -392,6 +405,10 @@ object Main extends App {
 
   /**
    * Vérifie si le joueur peut se déplacer sur la case (x, y).
+   *
+   * @param x Position en X.
+   * @param y Position en Y.
+   * @return true si le déplacement est valide, false sinon.
    */
   private def isValidMove(x: Int, y: Int): Boolean = {
     x >= 0 && x < gridWidth &&
@@ -399,11 +416,14 @@ object Main extends App {
       world(x)(y) != W &&  // Bloqué par un mur
       world(x)(y) != S &&  // Bloqué par un squelette
       world(x)(y) != R &&  // Bloqué par un rocher
-      world(x)(y) != C     // Bloqué par un coffre fermé
+      world(x)(y) != C     // Bloqué par une porte fermée
   }
 
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
+   *
+   * @param direction Direction du joueur (true = gauche, false = droite).
+   * @param AnimationIndex Index de l'animation du joueur.
    */
   private def renderWorld(direction:Boolean, AnimationIndex:Int): Unit = {
     val level = levels(currentLevelIndex)
@@ -632,6 +652,9 @@ object Main extends App {
     }
   }
 
+  /**
+   * Gère la logique de l'écran de transition entre les niveaux.
+   */
   private def transitionScreen(): Unit = {
     // Affiche l'écran de transition
     screenChanger.play()
@@ -642,7 +665,7 @@ object Main extends App {
   }
 
   /**
-   * Renders the advice screen with game instructions.
+   * Affiche l'écran de tuto.
    */
   private def renderAdvice(): Unit = {
     fg.drawTransformedPicture(
@@ -654,6 +677,9 @@ object Main extends App {
     )
   }
 
+  /**
+   * Affiche l'écran de transition entre les niveaux.
+   */
   private def renderTransition(): Unit = {
     fg.drawTransformedPicture(
       posX   = screenWidth / 2,
