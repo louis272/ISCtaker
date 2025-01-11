@@ -18,9 +18,9 @@ object Main extends App {
   private var frameCount: Int = 0
 
   private var AnimationIndex: Int = 0
-  var Kicking: Boolean = false
+  private var Kicking: Boolean = false
 
-  var Mudry: EntityRender = new EntityRender(
+  private val Mudry: EntityRender = new EntityRender(
     List(
       "/res/Mudry - Idle.png",
       "/res/Mudry - Left.png",
@@ -30,7 +30,7 @@ object Main extends App {
     0.7
   )
 
-  var MudryFlipped: EntityRender = new EntityRender(
+  private val MudryFlipped: EntityRender = new EntityRender(
     List(
       "/res/Mudry Idle F.png",
       "/res/Mudry Left F.png",
@@ -42,7 +42,7 @@ object Main extends App {
 
 
 
-  var MudryKick : EntityRender = new EntityRender(
+  private val MudryKick : EntityRender = new EntityRender(
     List(
       "/res/Mudry Kick - frame 1.png",
       "/res/Mudry Kick - frame 2.png",
@@ -52,7 +52,7 @@ object Main extends App {
     0.7
   )
 
-  var MudryKickFlipped : EntityRender = new EntityRender(
+  private val MudryKickFlipped : EntityRender = new EntityRender(
     List(
       "/res/Mudry Kick frame 1 F.png",
       "/res/Mudry Kick frame 2 F.png",
@@ -134,7 +134,7 @@ object Main extends App {
     0.6
   )
 
-  var Skeleton : EntityRender = new EntityRender(
+  private val Skeleton : EntityRender = new EntityRender(
     List(
       "/res/skeleton - Idle.gif",
       "/res/skeleton - Left.gif",
@@ -409,7 +409,7 @@ object Main extends App {
   /**
    * Affiche la grille, ses entités et l'état des pièges à l'écran.
    */
-  def renderWorld(direction:Boolean,AnimationIndex:Int): Unit = {
+  private def renderWorld(direction:Boolean, AnimationIndex:Int): Unit = {
     val level = levels(currentLevelIndex)
     val movesLeft = math.max(0, level.maxMoves - level.currentMoves)
 
@@ -603,7 +603,7 @@ object Main extends App {
       }
 
     } catch {
-      case e: Exception => // Ignore
+      case _: Exception => // Ignore
     }
   }
 
