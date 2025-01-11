@@ -17,6 +17,14 @@ class Level(val grid: Array[Array[Int]], val trapsGrid: Array[Array[Int]], val m
  * Companion object for the Level class, providing a method to initialize levels.
  */
 object Level {
+  /**
+   * Initialize levels.
+   *
+   * @param screenWidth Width of the screen.
+   * @param gridWidth Width of the grid.
+   * @param tileSize Size of a tile.
+   * @return List of levels.
+   */
   def initializeLevels(screenWidth: Int, gridWidth: Int, tileSize: Int): List[Level] = {
     List(
       // Level 1

@@ -18,6 +18,9 @@ class Audio (path : String) {
       e.printStackTrace()
   }
 
+  /**
+   * Play the audio
+   */
   def play(): Unit = {
     // Open stream and play
     try {
