@@ -16,6 +16,13 @@ A **Scala-based** interpretation of the original _Helltakers_ game, **ISCtaker**
 - [Installation](#installation)
 - [How to Play](#how-to-play)
 - [Entities](#entities)
+- [Code Structure](#code-structure)
+  - [Main.scala](#mainscala)
+  - [EntityRender.scala](#entityrenderscala)
+  - [Level.scala](#levelscala)
+  - [Audio.scala](#audioscala)
+  - [Graphics & Assets](#graphics--assets)
+  - [Key Interactions](#key-interactions)
 - [Contributing](#contributing)
 - [Contact](#contact)
 
@@ -100,6 +107,51 @@ Use your moves carefully—some obstacles can be pushed or destroyed, while othe
 </p>
 
 ---
+
+## Code Structure
+
+The **ISCtaker** project is structured to modularly handle different aspects of the game, ensuring readability, maintainability, and scalability. Here’s an overview:
+
+### **Main.scala**
+This serves as the entry point of the game, initializing the game logic, levels, and graphical components. Key functions include:
+- **Game Loop**: The main loop synchronizes game logic and renders frames using `FunGraphics`.
+- **Event Handling**: Captures player input to control movement, interactions, and special actions.
+- **Level Management**: Handles loading, transitioning, and resetting levels, alongside rendering game elements dynamically.
+- **Audio Integration**: Plays background music and sound effects corresponding to in-game events (e.g., moving objects, picking keys).
+
+### **EntityRender.scala**
+Defines the `EntityRender` class for managing graphical representations of entities:
+- **Frames**: Stores paths to sprite or animation frames for dynamic rendering.
+- **Scaling**: Adjusts the size of entities based on their context in the game world.
+
+### **Level.scala**
+Encapsulates the logic for individual levels, including:
+- **Grid Representation**: Uses 2D arrays to define the layout of entities and traps.
+- **Attributes**: Tracks maximum moves, player possession of keys, and the presence of dynamic traps.
+- **Initialization**: Provides a method for setting up multiple levels with predefined configurations.
+
+### **Audio.scala**
+Handles audio playback using the Java Sound API:
+- **Loading**: Reads audio files into a reusable `Clip`.
+- **Playback Control**: Methods for playing, stopping, and resetting audio during gameplay.
+
+### **Graphics & Assets**
+All graphical assets (sprites, backgrounds, etc.) are referenced by their file paths and rendered using `FunGraphics`:
+- **Dynamic Rendering**: Adjusts visuals based on entity state and game logic.
+- **Transitions and Effects**: Includes visual transitions between levels and animations for player interactions.
+
+### **Key Interactions**
+The game logic is built around responding to player inputs and updating the game state accordingly:
+- **Collision Detection**: Checks for valid moves based on the current grid state.
+- **Object Interactions**: Handles pushing, destroying, and unlocking objects like rocks and doors.
+- **Trap Mechanics**: Toggles the state of traps after player actions to increase challenge.
+
+This modular structure ensures that each component can be individually tested and extended. For example, new levels or entities can be added with minimal changes to the existing codebase.
+
+---
+
+
+
 ## Contributors
 
 - **[@louis272](https://github.com/louis272)** – Developer
