@@ -48,7 +48,7 @@ A **Scala-based** interpretation of the original _Helltakers_ game, **ISCtaker**
   <img src="src/res/screenshot1.png" alt="Gameplay Screenshot" width="70%">
 </p>
 
-Experience the charming pixel art style and fluid animations as you progress through each puzzle.
+Experience the charming style and 3fps animations as you progress through each puzzle.
 
 ---
 
@@ -157,8 +157,6 @@ This modular structure ensures that each component can be individually tested an
 - **[@louis272](https://github.com/louis272)** – Developer
 - **[@Sebastian0211-vs](https://github.com/Sebastian0211-vs)** – Developer
 - **Gaëtan Veuillet** – Illustrator of all the “Mudry" Sprites
-
-If you’ve contributed and would like your name added, please feel free to submit a PR or open an issue. We appreciate all the help we can get!
 
 ---
 
