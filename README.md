@@ -1,34 +1,128 @@
-# ISCtaker
+<p align="center">
+  <img src="src/res/Banner.png" alt="Gameplay GIF" style="max-width:100%;">
+</p>
 
-## Overview
-ISCtaker is a Scala-based game where players navigate through various levels, overcoming obstacles and reaching goals. The game features different entities such as demons, skeletons, rocks, doors, and keys, each with unique properties and behaviors.
+A **Scala-based** interpretation of the original _Helltakers_ game, **ISCtaker** challenges players to navigate puzzle-like levels filled with moving obstacles, locked doors, and quirky demons. With each level growing in complexity, you'll need skill and strategy to outmaneuver skeletons, push rocks out of the way, and ultimately reach your demon companion.
+
+<p align="center">
+  <img src="src/res/Mudry%20HQ.gif" alt="Gameplay GIF" style="max-width:100%;">
+</p>
+
+---
+
+## Table of Contents
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [How to Play](#how-to-play)
+- [Entities](#entities)
+- [Contributing](#contributing)
+- [Contact](#contact)
+
+---
 
 ## Features
-- Multiple levels with increasing difficulty
-- Various entities with unique animations and interactions
-- Transition screens between levels
-- Background music and sound effects
-- Keyboard controls for player movement and level management
+- **Multiple Levels**  
+  Progress through increasingly challenging stages as you refine your puzzle-solving skills.
+- **Unique Entities & Animations**  
+  Encounter various entities—skeletons, rocks, doors, and demons—each with their own behavior and animations.
+- **Interactive Transitions**  
+  Enjoy seamless screen transitions and narrative interludes between levels.
+- **Original Music & Sound Effects**  
+  Immerse yourself in the experience with engaging background music and fitting sound effects.
+- **Keyboard-Based Controls**  
+  Use simple, intuitive keyboard commands to guide your character and navigate menus.
+
+---
+
+## Screenshots
+
+<p align="center">
+  <img src="src/res/screenshot1.png" alt="Gameplay Screenshot" width="70%">
+</p>
+
+Experience the charming pixel art style and fluid animations as you progress through each puzzle.
+
+---
 
 ## Installation
-1. Clone the repository:
-   ```sh
+
+1. **Clone the repository**:
+   ```bash
    git clone https://github.com/louis272/ISCtaker.git
-    ```
-2. Open the project in IntelliJ IDEA or another Scala-compatible IDE.
-3. Run the project to start the game.
+   ```
+2. **Open in IntelliJ IDEA (or any Scala-compatible IDE)**:
+   - Import the cloned repository as an existing project.
+   - Ensure that you have the correct Scala SDK or JDK configurations.
+3. **Run/Debug the Project**:
+   - Locate the main class or run configuration in your IDE.
+   - Press the run/debug button to start your journey.
 
-## Game
-### Game Controls
-- Arrow Keys: Move the player
-- R: Reset the current level
-- L: Show advice
-- ESC: Hide advice
+> **Tip**: If you prefer using the command line, you can use [SBT (Scala Build Tool)](https://www.scala-sbt.org/) to compile and run the game.
 
-### Entities
-- Player: The main character controlled by the player
-- Demon: Must be reached to complete the level
-- Skeleton: Obstacle that can be moved and destroyed
-- Rock: Obstacle that can be moved but not destroyed
-- Door: Must be unlocked with a key to go through
-- Key: Must be collected to unlock the door
+---
+
+## How to Play
+
+1. **Objective**: Reach the demon in each level to progress.
+2. **Movement**: Use the arrow keys to move your character across the grid.
+3. **Interactions**:
+   - Press **`R`** to reset the current level if you get stuck.
+   - Press **`L`** to reveal hints or advice.
+   - Press **`Esc`** to hide these hints.
+
+Use your moves carefully—some obstacles can be pushed or destroyed, while others require keys to bypass.
+
+---
+
+## Entities
+
+- **Player**  
+  The hero you control. Maneuver across the grid, collect items, and solve puzzles.
+- **Demon**  
+  Your level’s goal! Reach the demon to complete the stage and unlock new levels.
+- **Skeleton**  
+  A pushable obstacle that can be destroyed. Maneuver skeletons to clear paths or create new routes.
+- **Rock**  
+  An immovable obstacle that blocks your path but cannot be destroyed.
+- **Door**  
+  Pass through only after unlocking with a collected key.
+- **Key**  
+  A crucial item needed to unlock doors and progress further.
+
+<p float="left">
+  <img src="src/res/Skeleton.gif" alt="Skeleton GIF" style="max-width:100%;">
+  <img src="src/res/rock.png" alt="Rock GIF" style="max-width:30%;">
+  <img src="src/res/Lucifer.gif" alt="Door GIF" style="max-width:30%;">
+</p>
+
+---
+## Contributors
+
+- **[@louis272](https://github.com/louis272)** – Developer
+- **[@Sebastian0211-vs](https://github.com/Sebastian0211-vs)** – Developer
+- **Gaëtan Veuillet** – Illustrator of all the “Mudry" Sprites
+
+If you’ve contributed and would like your name added, please feel free to submit a PR or open an issue. We appreciate all the help we can get!
+
+---
+
+## Contributing
+
+Contributions, bug reports, and feature requests are welcome! Here’s how you can help:
+1. [Fork this repository](https://github.com/louis272/ISCtaker/fork).
+2. Create a **branch** for your feature/bugfix:
+   ```bash
+   git checkout -b feature/super-cool-feature
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add super cool feature"
+   ```
+4. **Push** to your forked repository and submit a **Pull Request**.
+
+---
+
+## Contact
+
+Have questions or feedback? Feel free to reach out by creating an issue or submitting a pull request. We appreciate your interest in **ISCtaker**—thanks for playing!

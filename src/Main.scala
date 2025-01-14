@@ -689,8 +689,6 @@ object Main extends App {
       imageName = transitionScreenPath
     )
   }
-
-
   // Gestion des événements clavier
   fg.setKeyManager(new KeyAdapter() {
     override def keyPressed(e: KeyEvent): Unit = {
@@ -759,5 +757,4 @@ object Main extends App {
     // Sync the game logic ~60 times a second
     fg.syncGameLogic(10)
   }
-
 }
