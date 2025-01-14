@@ -73,6 +73,9 @@ Experience the charming pixel art style and fluid animations as you progress thr
 
 Use your moves carefully—some obstacles can be pushed or destroyed, while others require keys to bypass.
 
+<p align="center">
+  <img src="src/res/Tuto.png" alt="Gameplay Screenshot" width="100%">
+</p>
 ---
 
 ## Entities
