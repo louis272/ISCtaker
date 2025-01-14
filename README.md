@@ -76,6 +76,7 @@ Use your moves carefully—some obstacles can be pushed or destroyed, while othe
 <p align="center">
   <img src="src/res/Tuto.png" alt="Gameplay Screenshot" width="100%">
 </p>
+
 ---
 
 ## Entities
