@@ -1,7 +1,8 @@
 import Main.{C, Cerberus, G, K, Malina, Modeus, P, Pandemonica, R, S, W, Zdrada}
 
 /**
- * Class representing a level.
+ * Level class
+ * This class represents a level in the game.
  *
  * @param grid Grid of the level (each integer represents an entity type).
  * @param maxMoves Maximum number of moves allowed to complete the level.
