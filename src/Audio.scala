@@ -2,6 +2,8 @@ import javax.sound.sampled.{AudioSystem, Clip}
 
 /**
  * Audio class
+ * This class is used to play audio files
+ *
  * @param path: Path to the audio file
  */
 class Audio (path : String) {
