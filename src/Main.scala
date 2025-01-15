@@ -202,9 +202,9 @@ object Main extends App {
 
   /**
    * Load a level from the list of levels.
+   *
    * @param levelIndex The index of the level to load.
    */
-
   private def loadLevel(levelIndex: Int): Unit = {
     val level = levels(levelIndex)
     gridWidth = level.gridWidth
@@ -225,6 +225,7 @@ object Main extends App {
 
   /**
    * Find the player in the grid.
+   *
    * @param grid The grid to search in.
    * @return The position of the player.
    */
@@ -237,6 +238,7 @@ object Main extends App {
 
   /**
    * Handle the player input.
+   *
    * @param dx The change in x.
    * @param dy The change in y.
    */
@@ -341,6 +343,7 @@ object Main extends App {
 
   /**
    * Inverts the state of the traps.
+   *
    * @param level The current level.
    */
   private def toggleTraps(level: Level): Unit = {
@@ -352,6 +355,7 @@ object Main extends App {
 
   /**
    * Move the player to new coordinates.
+   *
    * @param newX New X position.
    * @param newY New Y position.
    */
@@ -365,6 +369,7 @@ object Main extends App {
 
   /**
    * Move an entity to new coordinates.
+   *
    * @param oldX Old X position.
    * @param oldY Old Y position.
    * @param newX New X position.
@@ -378,6 +383,7 @@ object Main extends App {
 
   /**
    * Destroy an entity at the given coordinates.
+   *
    * @param x X position.
    * @param y Y position.
    */
@@ -387,6 +393,7 @@ object Main extends App {
 
   /**
    * Check if the move is valid.
+   *
    * @param x X position.
    * @param y Y position.
    * @return True if the move is valid, false otherwise.
@@ -402,6 +409,7 @@ object Main extends App {
 
   /**
    * Render the world.
+   *
    * @param direction The direction of the player.
    * @param AnimationIndex The index of the current animation frame.
    */
