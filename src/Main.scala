@@ -451,7 +451,7 @@ object Main extends App {
               posY   = level.offsetY + j * tileSize + tileSize / 2,
               angle  = 0.0,
               scale  = 0.1,
-              imageName = if(!level.movableSpikes){spikeDownPath} else {spikeUpPath}
+              imageName = if (!level.movableSpikes) {spikeDownPath} else spikeUpPath
             )
 
         } else if (trapWorld(i)(j) == -1) {
@@ -460,7 +460,7 @@ object Main extends App {
               posY   = level.offsetY + j * tileSize + tileSize / 2,
               angle  = 0.0,
               scale  = 0.1,
-              imageName = if(!level.movableSpikes){spikeUpPath} else {spikeDownPath}
+              imageName = if (!level.movableSpikes) {spikeUpPath} else spikeDownPath
             )
         }
 

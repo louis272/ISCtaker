@@ -13,7 +13,7 @@ class Audio (path : String) {
     val url = classOf[Audio].getResource(path)
     val audioStream = AudioSystem.getAudioInputStream(url)
 
-    audioClip = AudioSystem.getClip.asInstanceOf[Clip]
+    audioClip = AudioSystem.getClip
     audioClip.open(audioStream)
   } catch {
     case e: Exception =>
