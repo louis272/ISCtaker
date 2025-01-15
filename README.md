@@ -65,6 +65,7 @@ Experience the charming style and 3fps animations as you progress through each p
    - Locate the main class or run configuration in your IDE.
    - Press the run/debug button to start your journey.
 
+> **Tip**: We used Scala SDK 2.13.14.
 > **Tip**: If you prefer using the command line, you can use [SBT (Scala Build Tool)](https://www.scala-sbt.org/) to compile and run the game.
 
 ---
