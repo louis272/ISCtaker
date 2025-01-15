@@ -61,11 +61,11 @@ Experience the charming style and 3fps animations as you progress through each p
 2. **Open in IntelliJ IDEA (or any Scala-compatible IDE)**:
    - Import the cloned repository as an existing project.
    - Ensure that you have the correct Scala SDK or JDK configurations.
+     > **Tip**: We used Scala SDK 2.13.14.
 3. **Run/Debug the Project**:
    - Locate the main class or run configuration in your IDE.
    - Press the run/debug button to start your journey.
 
-> **Tip**: We used Scala SDK 2.13.14.
 > **Tip**: If you prefer using the command line, you can use [SBT (Scala Build Tool)](https://www.scala-sbt.org/) to compile and run the game.
 
 ---
