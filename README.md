@@ -1,10 +1,10 @@
-<p align="center">
+<p>
   <img src="src/res/Banner.png" alt="Gameplay GIF" style="max-width:100%;">
 </p>
 
 A **Scala-based** interpretation of the original _Helltakers_ game, **ISCtaker** challenges players to navigate puzzle-like levels filled with moving obstacles, locked doors, and quirky demons. With each level growing in complexity, you'll need skill and strategy to outmaneuver skeletons, push rocks out of the way, and ultimately reach your demon companion.
 
-<p align="center">
+<p>
   <img src="src/res/Mudry%20HQ.gif" alt="Gameplay GIF" style="max-width:100%;">
 </p>
 
@@ -44,8 +44,9 @@ A **Scala-based** interpretation of the original _Helltakers_ game, **ISCtaker**
 
 ## Screenshots
 
-<p align="center">
-  <img src="src/res/screenshot1.png" alt="Gameplay Screenshot" width="70%">
+<p float="left">
+  <img src="src/res/screenshot1.png" alt="Gameplay Screenshot" width="50%">
+  <img src="src/res/screenshot level4.png" alt="Gameplay Screenshot" width="50%">
 </p>
 
 Experience the charming style and 3fps animations as you progress through each puzzle.
