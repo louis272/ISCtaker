@@ -106,6 +106,8 @@ Use your moves carefully—some obstacles can be pushed or destroyed, while othe
 <p float="left">
   <img src="src/res/Skeleton.gif" alt="Skeleton GIF" style="max-width:100%;">
   <img src="src/res/Lucifer.gif" alt="Door GIF" style="max-width:30%;">
+  <img src="src/res/Pandemonia.gif" alt="Key GIF" style="max-width:30%;">
+  <img src="src/res/Justice.gif" alt="Rock GIF" style="max-width:30%;">
 </p>
 
 ---
