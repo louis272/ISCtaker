@@ -45,8 +45,8 @@ A **Scala-based** interpretation of the original _Helltakers_ game, **ISCtaker**
 ## Screenshots
 
 <p float="left">
-  <img src="src/res/screenshot1.png" alt="Gameplay Screenshot" width="50%">
-  <img src="src/res/screenshot level4.png" alt="Gameplay Screenshot" width="50%">
+  <img src="src/res/screenshot1.png" alt="Gameplay Screenshot" width="45%">
+  <img src="src/res/screenshot level4.png" alt="Gameplay Screenshot" width="45%">
 </p>
 
 Experience the charming style and 3fps animations as you progress through each puzzle.
