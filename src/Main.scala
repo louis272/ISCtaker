@@ -8,19 +8,19 @@ import javax.swing.SwingConstants
  * Main object for the ISC Taker game.
  */
 object Main extends App {
-  private var currentLevelIndex: Int = 0
-  private var levels: List[Level] = _
-  private var world: Array[Array[Int]] = _
-  private var trapWorld: Array[Array[Int]] = _
-  private var gridWidth: Int = 5
-  private var gridHeight: Int = 5
+  private var currentLevelIndex: Int = 0 // Index of the current level
+  private var levels: List[Level] = _ // List of levels
+  private var world: Array[Array[Int]] = _ // Current world grid
+  private var trapWorld: Array[Array[Int]] = _ // Current traps grid
+  private var gridWidth: Int = 5 // Default grid width
+  private var gridHeight: Int = 5 // Default grid height
 
-  private var frameCount: Int = 0
+  private var frameCount: Int = 0 // Frame counter for animations
 
-  private var AnimationIndex: Int = 0
-  private var Kicking: Boolean = false
+  private var AnimationIndex: Int = 0 // Index of the current animation frame
+  private var Kicking: Boolean = false // Flag to indicate if the player is kicking
 
-  private val Mudry: EntityRender = new EntityRender(
+  private val Mudry: EntityRender = new EntityRender( // EntityRender for Mudry
     List(
       "/res/Mudry - Idle.png",
       "/res/Mudry - Left.png",
@@ -30,7 +30,7 @@ object Main extends App {
     0.7
   )
 
-  private val MudryFlipped: EntityRender = new EntityRender(
+  private val MudryFlipped: EntityRender = new EntityRender( // EntityRender for Mudry (flipped)
     List(
       "/res/Mudry Idle F.png",
       "/res/Mudry Left F.png",
@@ -40,7 +40,7 @@ object Main extends App {
     0.7
   )
 
-  private val MudryKick : EntityRender = new EntityRender(
+  private val MudryKick : EntityRender = new EntityRender( // EntityRender for Mudry (kicking)
     List(
       "/res/Mudry Kick - frame 1.png",
       "/res/Mudry Kick - frame 2.png",
@@ -50,7 +50,7 @@ object Main extends App {
     0.7
   )
 
-  private val MudryKickFlipped : EntityRender = new EntityRender(
+  private val MudryKickFlipped : EntityRender = new EntityRender( // EntityRender for Mudry (kicking, flipped)
     List(
       "/res/Mudry Kick frame 1 F.png",
       "/res/Mudry Kick frame 2 F.png",
@@ -60,7 +60,7 @@ object Main extends App {
     0.7
   )
 
-  var Pandemonica : EntityRender = new EntityRender(
+  var Pandemonica : EntityRender = new EntityRender( // EntityRender for Pandemonica
     List(
       "/res/Pandemonica - Idle.gif",
       "/res/Pandemonica - Left.gif",
@@ -70,7 +70,7 @@ object Main extends App {
     0.6
   )
 
-  var Modeus : EntityRender = new EntityRender(
+  var Modeus : EntityRender = new EntityRender( // EntityRender for Modeus
     List(
       "/res/Modeus Idle.gif",
       "/res/Modeus Left.gif",
@@ -80,7 +80,7 @@ object Main extends App {
     0.6
   )
 
-  var Cerberus : EntityRender = new EntityRender(
+  var Cerberus : EntityRender = new EntityRender( // EntityRender for Cerberus
     List(
       "/res/Cerberus Idle.gif",
       "/res/Cerberus Left.gif",
@@ -89,28 +89,28 @@ object Main extends App {
     ),
     0.6
   )
+//Existing Sprites for more levels if needed
+//  var Justice : EntityRender = new EntityRender(
+//    List(
+//      "/res/Justice Idle.gif",
+//      "/res/Justice Left.gif",
+//      "/res/Justice Idle.gif",
+//      "/res/Justice Right.gif",
+//    ),
+//    0.6
+//  )
+//
+//  var Azazel : EntityRender = new EntityRender(
+//    List(
+//      "/res/Azazel Idle.gif",
+//      "/res/Azazel Left.gif",
+//      "/res/Azazel Idle.gif",
+//      "/res/Azazel Right.gif",
+//    ),
+//    0.6
+//  )
 
-  var Justice : EntityRender = new EntityRender(
-    List(
-      "/res/Justice Idle.gif",
-      "/res/Justice Left.gif",
-      "/res/Justice Idle.gif",
-      "/res/Justice Right.gif",
-    ),
-    0.6
-  )
-
-  var Azazel : EntityRender = new EntityRender(
-    List(
-      "/res/Azazel Idle.gif",
-      "/res/Azazel Left.gif",
-      "/res/Azazel Idle.gif",
-      "/res/Azazel Right.gif",
-    ),
-    0.6
-  )
-
-  var Zdrada : EntityRender = new EntityRender(
+  var Zdrada : EntityRender = new EntityRender(  // EntityRender for Zdrada
     List(
       "/res/Zdrada Idle.gif",
       "/res/Zdrada Left.gif",
@@ -120,7 +120,7 @@ object Main extends App {
     0.6
   )
 
-  var Malina : EntityRender = new EntityRender(
+  var Malina : EntityRender = new EntityRender( // EntityRender for Malina
     List(
       "/res/Malina Idle.gif",
       "/res/Malina Left.gif",
@@ -130,7 +130,7 @@ object Main extends App {
     0.6
   )
 
-  private val Skeleton : EntityRender = new EntityRender(
+  private val Skeleton : EntityRender = new EntityRender( // EntityRender for Skeleton
     List(
       "/res/skeleton - Idle.gif",
       "/res/skeleton - Left.gif",
@@ -177,62 +177,56 @@ object Main extends App {
   private val stoneMove      = new Audio("res/sounds/stone_move.wav")
 
 
-  // Création de la fenêtre graphique
+  // Create a new FunGraphics object
   private val fg = new FunGraphics(screenWidth, screenHeight, "ISC TAKER")
 
-  // Codes associés aux différentes entités du jeu
-  val P = 1  // Joueur
-  val W = 2  // Mur
-  val G = 3  // But (Goal)
-  val S = 4  // Squelette
-  val R = 5  // Rocher
-  val C = 6  // Porte
-  val K = 8  // Clé
+  // Constants for the entities
+  val P = 1  // Player
+  val W = 2  // Wall
+  val G = 3  // Goal
+  val S = 4  // Skeleton
+  val R = 5  // Rock
+  val C = 6  // Door
+  val K = 8  // Key
 
-  // Position initiale du joueur
+  // Variables for the player
   private var playerPos: (Int, Int) = (0, 0)
   private var playerDirection: Boolean = false // false = right, true = left
-
+  // Variables for the game state
   private var shouldRenderAdvice: Boolean     = false
   private var shouldRenderTransition: Boolean = false
 
 
-  // Initialisation de la liste des niveaux
+  // Initialize the levels
   levels = Level.initializeLevels(screenWidth, gridWidth, tileSize)
 
   /**
-   * Charge un niveau à partir d'un index donné.
-   *
-   * @param levelIndex L'index du niveau à charger dans la liste des niveaux.
+   * Load a level from the list of levels.
+   * @param levelIndex The index of the level to load.
    */
+
   private def loadLevel(levelIndex: Int): Unit = {
     val level = levels(levelIndex)
     gridWidth = level.gridWidth
     gridHeight = level.gridHeight
-
+    // Copy the grid and trapsGrid to the world and trapWorld arrays
     world = level.grid.map(_.clone())
-
-    // 2) Copy the traps layer
     trapWorld = level.trapsGrid.map(_.clone())
-
-    // 3) oldWorld / oldTrapWorld for comparison
+    // Initialize the oldWorld and oldTrapWorld arrays
     oldWorld    = Array.fill(gridWidth, gridHeight)(-999)
     oldTrapWorld= Array.fill(gridWidth, gridHeight)(-999)
-
-    // Find player and reset moves, key, etc.
+    // Set the player position
     playerPos = findPlayer(world)
     level.currentMoves = 0
     level.hasKey = false
-
-    // Force re-drawing of moves text next time
+    // Reset the previous moves left
     oldMovesLeft = -1
   }
 
   /**
-   * Parcourt la grille pour trouver la position (x, y) du joueur.
-   *
-   * @param grid Grille de jeu.
-   * @return Tuple (x, y) représentant la position du joueur.
+   * Find the player in the grid.
+   * @param grid The grid to search in.
+   * @return The position of the player.
    */
   private def findPlayer(grid: Array[Array[Int]]): (Int, Int) = {
     for (x <- grid.indices; y <- grid(x).indices) {
@@ -242,77 +236,70 @@ object Main extends App {
   }
 
   /**
-   * Gère les déplacements du joueur et les interactions avec l'environnement.
-   *
-   * @param dx Déplacement en X (gauche/droite).
-   * @param dy Déplacement en Y (haut/bas).
+   * Handle the player input.
+   * @param dx The change in x.
+   * @param dy The change in y.
    */
   private def handlePlayerInput(dx: Int, dy: Int): Unit = {
     val level = levels(currentLevelIndex)
 
-    // Vérifie si le joueur a déjà épuisé tous ses déplacements
+    // Check if the player has any moves left
     if (level.currentMoves >= level.maxMoves) {
-      println("Mouvements épuisés ! Redémarrage du niveau.")
       playerDeath.play()
       transitionScreen()
       loadLevel(currentLevelIndex)
       return
     }
-
+    // Get the player's current position
     val (x, y) = playerPos
     val newX = x + dx
     val newY = y + dy
 
-    // Vérifie si la case ciblée est accessible ou non (ni mur, ni squelette, etc.)
+    // Check if the move is valid
     if (isValidMove(newX, newY)) {
-      // Si le joueur récupère une clé
+      // If the player is moving to a key, pick it up
       if (world(newX)(newY) == K) {
         level.hasKey = true
-        println("Clé récupérée !")
         keyPickUp.play()
       }
-      // Vérifie si on marche sur un piège "vivant" (1)
+      // Check if the player is moving to a trap
       if (trapWorld(newX)(newY) == -1) {
-        println("Ouch! Piège actif : vous perdez un déplacement supplémentaire.")
         spikesDamage.play()
-        level.currentMoves += 1 // Pénalité
+        level.currentMoves += 1 // Player loses an extra move
       }
 
-      // Effectue le mouvement du joueur
+      // Move the player
       movePlayer(newX, newY)
       level.currentMoves += 1
 
-      // Inverse l'état des pièges après chaque déplacement
+      // toggle the traps
       toggleTraps(level)
 
     } else if (world(newX)(newY) == C && !level.hasKey) {
-      // Si on tente d'ouvrir une porte sans clé
-      println("Porte fermée !")
+      // If the player is moving to a closed door without a key
       doorClosedKick.play()
 
     } else if (world(newX)(newY) == C && level.hasKey) {
-      // Ouvrir la porte si on a la clé
-      println("Porte ouverte !")
+      // Open the door if the player has the key
       doorOpening.play()
       destroyEntity(newX, newY)
 
     } else if (world(newX)(newY) == S) {
-      // S'il y a un squelette, on tente de le pousser
+      // If the player is moving to a skeleton, try to kick it
       val entityNewX = newX + dx
       val entityNewY = newY + dy
 
       enemyKick.play()
       Kicking = true
 
-      // Vérifie si la position cible est dans les limites du tableau
+      // Check if the skeleton can be pushed
       if (entityNewX >= 0 && entityNewX < gridWidth && entityNewY >= 0 && entityNewY < gridHeight) {
-        // S'il y a un mur ou un rocher à l'endroit où on veut pousser le squelette, on le détruit.
+        // If the destination is a wall or a rock, the skeleton is destroyed
         if (world(entityNewX)(entityNewY) == W || world(entityNewX)(entityNewY) == R) {
-          println("Squelette détruit !")
           enemyDie.play()
           destroyEntity(newX, newY)
         }
-        // Sinon, s'il n'y a rien ou bien un piège, on déplace le squelette
+        // Else, if the destination is empty or a trap, move the player and the skeleton
         else if (world(entityNewX)(entityNewY) == 0 || trapWorld(entityNewX)(entityNewY) != 0) {
           moveEntity(newX, newY, entityNewX, entityNewY)
           level.currentMoves += 1
@@ -321,26 +308,25 @@ object Main extends App {
       }
 
     } else if (world(newX)(newY) == R) {
-      // Gestion du déplacement des rochers
+      // If the player is moving to a rock, try to kick it
       val entityNewX = newX + dx
       val entityNewY = newY + dy
 
       stoneKick.play()
       Kicking = true
 
-      // Vérifie si le rocher peut être poussé
+      // Check if the rock can be pushed
       if (entityNewX < 0 || entityNewX >= gridWidth || entityNewY < 0 || entityNewY >= gridHeight) {
-        // Destination hors limites → on ne pousse pas
+        // If the destination is out of bounds, the rock is destroyed
       } else {
-        // On regarde ce qui se trouve à l'endroit où on souhaite pousser le rocher
+        // Check if the rock can be pushed
         world(entityNewX)(entityNewY) match {
-          // Si la destination est un mur, un rocher ou une porte, on ne peut pas pousser
+          // If the destination is a wall or a rock, the rock is destroyed
           case W | R | C | S =>
-            println("Rocher bloqué par un mur/rocher !")
             level.currentMoves += 1
             toggleTraps(level)
 
-          // S'il n'y a rien ou un piège, on peut pousser
+          // Else, if the destination is empty, move the player and the rock
           case _ =>
             moveEntity(newX, newY, entityNewX, entityNewY)
             stoneMove.play()
@@ -354,9 +340,8 @@ object Main extends App {
   }
 
   /**
-   * Change l'état de chaque piège : d'actif (-1) à inactif (1) et vice-versa.
-   *
-   * @param level Niveau actuel.
+   * Inverts the state of the traps.
+   * @param level The current level.
    */
   private def toggleTraps(level: Level): Unit = {
     for (x <- 0 until gridWidth; y <- 0 until gridHeight) {
@@ -366,10 +351,9 @@ object Main extends App {
   }
 
   /**
-   * Déplace le joueur vers de nouvelles coordonnées (newX, newY).
-   *
-   * @param newX Nouvelle position en X.
-   * @param newY Nouvelle position en Y.
+   * Move the player to new coordinates.
+   * @param newX New X position.
+   * @param newY New Y position.
    */
   private def movePlayer(newX: Int, newY: Int): Unit = {
     val (x, y) = playerPos
@@ -380,12 +364,11 @@ object Main extends App {
   }
 
   /**
-   * Déplace une entité quelconque (squelette, rocher, etc.) vers de nouvelles coordonnées.
-   *
-   * @param oldX Ancienne position en X.
-   * @param oldY Ancienne position en Y.
-   * @param newX Nouvelle position en X.
-   * @param newY Nouvelle position en Y.
+   * Move an entity to new coordinates.
+   * @param oldX Old X position.
+   * @param oldY Old Y position.
+   * @param newX New X position.
+   * @param newY New Y position.
    */
   private def moveEntity(oldX: Int, oldY: Int, newX: Int, newY: Int): Unit = {
     val entity = world(oldX)(oldY)
@@ -394,21 +377,19 @@ object Main extends App {
   }
 
   /**
-   * Détruit (supprime) une entité sur la grille.
-   *
-   * @param x Position en X.
-   * @param y Position en Y.
+   * Destroy an entity at the given coordinates.
+   * @param x X position.
+   * @param y Y position.
    */
   private def destroyEntity(x: Int, y: Int): Unit = {
     world(x)(y) = 0
   }
 
   /**
-   * Vérifie si le joueur peut se déplacer sur la case (x, y).
-   *
-   * @param x Position en X.
-   * @param y Position en Y.
-   * @return true si le déplacement est valide, false sinon.
+   * Check if the move is valid.
+   * @param x X position.
+   * @param y Y position.
+   * @return True if the move is valid, false otherwise.
    */
   private def isValidMove(x: Int, y: Int): Boolean = {
     x >= 0 && x < gridWidth &&
@@ -420,10 +401,9 @@ object Main extends App {
   }
 
   /**
-   * Affiche la grille, ses entités et l'état des pièges à l'écran.
-   *
-   * @param direction Direction du joueur (true = gauche, false = droite).
-   * @param AnimationIndex Index de l'animation du joueur.
+   * Render the world.
+   * @param direction The direction of the player.
+   * @param AnimationIndex The index of the current animation frame.
    */
   private def renderWorld(direction:Boolean, AnimationIndex:Int): Unit = {
     val level = levels(currentLevelIndex)
@@ -445,7 +425,7 @@ object Main extends App {
         fg.drawFillRect(50,380,100,60)
         // Now draw the new text
         fg.setColor(Color.WHITE)
-        fg.drawFancyString(
+        fg.drawFancyString( // Draw the moves left
           posX = 70,
           posY = 425,
           str = s"$movesLeft",
@@ -464,43 +444,24 @@ object Main extends App {
       }
 
       for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
-        // 2) Re-draw the trap if needed
+        // Re-draw the trap if needed
         if (trapWorld(i)(j) == 1) {
-          if (!level.movableSpikes) {
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
               posY   = level.offsetY + j * tileSize + tileSize / 2,
               angle  = 0.0,
               scale  = 0.1,
-              imageName = spikeDownPath
+              imageName = if(!level.movableSpikes){spikeDownPath} else {spikeUpPath}
             )
-          } else {
-            fg.drawTransformedPicture(
-              posX   = level.offsetX + i * tileSize + tileSize / 2,
-              posY   = level.offsetY + j * tileSize + tileSize / 2,
-              angle  = 0.0,
-              scale  = 0.1,
-              imageName = spikeUpPath
-            )
-          }
+
         } else if (trapWorld(i)(j) == -1) {
-          if(!level.movableSpikes) {
             fg.drawTransformedPicture(
               posX   = level.offsetX + i * tileSize + tileSize / 2,
               posY   = level.offsetY + j * tileSize + tileSize / 2,
               angle  = 0.0,
               scale  = 0.1,
-              imageName = spikeUpPath
+              imageName = if(!level.movableSpikes){spikeUpPath} else {spikeDownPath}
             )
-          } else {
-            fg.drawTransformedPicture(
-              posX   = level.offsetX + i * tileSize + tileSize / 2,
-              posY   = level.offsetY + j * tileSize + tileSize / 2,
-              angle  = 0.0,
-              scale  = 0.1,
-              imageName = spikeDownPath
-            )
-          }
         }
 
         // 3) Re-draw the actual entity
@@ -613,7 +574,7 @@ object Main extends App {
           case _ =>
           // 0 means empty, so we do nothing because the tile is already white
         }
-        // 5) Update oldWorld and oldTrapWorld
+        // Update oldWorld and oldTrapWorld
         oldWorld(i)(j) = world(i)(j)
         oldTrapWorld(i)(j) = trapWorld(i)(j)
       }
@@ -624,13 +585,12 @@ object Main extends App {
   }
 
   /**
-   * Vérifie si le joueur a atteint le but (G) en étant adjacent à celui-ci.
-   * Si oui, charge le niveau suivant ou termine la partie si tous les niveaux sont finis.
+   * Check if the level is completed.
    */
   private def checkLevelCompletion(): Unit = {
     val (px, py) = playerPos
 
-    // Vérifie si le joueur est adjacent à la case G
+    // Check if the goal is adjacent to the player
     val goalAdjacent =
       (px > 0 && world(px - 1)(py) == G) ||
         (px < gridWidth - 1 && world(px + 1)(py) == G) ||
@@ -644,28 +604,24 @@ object Main extends App {
         transitionScreen()
 
         loadLevel(currentLevelIndex)
-      } else {
-        println("Félicitations ! Vous avez terminé tous les niveaux !")
-
-        // Ici, on pourrait stopper le jeu ou lancer une autre séquence.
       }
     }
   }
 
   /**
-   * Gère la logique de l'écran de transition entre les niveaux.
+   * Display the advice screen.
    */
   private def transitionScreen(): Unit = {
-    // Affiche l'écran de transition
+    // Play the screen changer sound
     screenChanger.play()
     shouldRenderTransition = true
-    // Attendre 2 secondes avant de charger le prochain niveau
+    // Wait for 2 seconds
     Thread.sleep(2000)
     shouldRenderTransition = false
   }
 
   /**
-   * Affiche l'écran de tuto.
+   * Display the advice screen.
    */
   private def renderAdvice(): Unit = {
     fg.drawTransformedPicture(
@@ -678,7 +634,7 @@ object Main extends App {
   }
 
   /**
-   * Affiche l'écran de transition entre les niveaux.
+   * Display the transition screen.
    */
   private def renderTransition(): Unit = {
     fg.drawTransformedPicture(
@@ -689,7 +645,7 @@ object Main extends App {
       imageName = transitionScreenPath
     )
   }
-  // Gestion des événements clavier
+  // Set the key manager
   fg.setKeyManager(new KeyAdapter() {
     override def keyPressed(e: KeyEvent): Unit = {
       e.getKeyCode match {
@@ -701,60 +657,60 @@ object Main extends App {
           playerDirection = true
         case KeyEvent.VK_RIGHT  => handlePlayerInput(1, 0)
           playerDirection = false
-        case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Réinitialise le niveau
+        case KeyEvent.VK_R      => loadLevel(currentLevelIndex) // Restart the level
           playerDirection = false; playerDeath.play(); transitionScreen()
-        case KeyEvent.VK_L      => shouldRenderAdvice = true // Affiche les conseils
-        case KeyEvent.VK_ESCAPE => shouldRenderAdvice = false // Cache les conseils
-        case KeyEvent.VK_0      => currentLevelIndex = 0; loadLevel(currentLevelIndex) // Charge le niveau 0
-        case KeyEvent.VK_1      => currentLevelIndex = 1; loadLevel(currentLevelIndex) // Charge le niveau 1
-        case KeyEvent.VK_2      => currentLevelIndex = 2; loadLevel(currentLevelIndex) // Charge le niveau 2
-        case KeyEvent.VK_3      => currentLevelIndex = 3; loadLevel(currentLevelIndex) // Charge le niveau 3
-        case KeyEvent.VK_4      => currentLevelIndex = 4; loadLevel(currentLevelIndex) // Charge le niveau 4
-        case KeyEvent.VK_5      => currentLevelIndex = 5; loadLevel(currentLevelIndex) // Charge le niveau 5
-        case KeyEvent.VK_6      => currentLevelIndex = 6; loadLevel(currentLevelIndex) // Charge le niveau 6
-        case _                  => // Aucune action pour les autres touches
+        case KeyEvent.VK_L      => shouldRenderAdvice = true // Display the advice
+        case KeyEvent.VK_ESCAPE => shouldRenderAdvice = false // Dismiss the advice
+        case KeyEvent.VK_0      => currentLevelIndex = 0; loadLevel(currentLevelIndex) // Load level 0
+        case KeyEvent.VK_1      => currentLevelIndex = 1; loadLevel(currentLevelIndex) // Load level 1
+        case KeyEvent.VK_2      => currentLevelIndex = 2; loadLevel(currentLevelIndex) // Load level 2
+        case KeyEvent.VK_3      => currentLevelIndex = 3; loadLevel(currentLevelIndex) // Load level 3
+        case KeyEvent.VK_4      => currentLevelIndex = 4; loadLevel(currentLevelIndex) // Load level 4
+        case KeyEvent.VK_5      => currentLevelIndex = 5; loadLevel(currentLevelIndex) // Load level 5
+        case KeyEvent.VK_6      => currentLevelIndex = 6; loadLevel(currentLevelIndex) // Load level 6
+        case _                  => // Ignore
       }
     }
   })
 
-  // Lancement de la musique de fond
+  // Start the game music
   gameMusic.play()
 
-  // Chargement du premier niveau
+  // Load the first level
   loadLevel(currentLevelIndex)
 
-  // Boucle principale du jeu
+  // Main game loop
   while (true) {
 
-    // 1) Increment the frameCount each loop (which is ~60 times/sec if fg.syncGameLogic(60))
+    // Increment the frame counter
     frameCount += 1
 
-    // 2) Every 15 frames, advance Mudry's animation
+    // If the frame count is even, cycle through the frames
     if (frameCount % 2 == 0) {
-      // Cycle through all frames in Mudry.frames
+      // Increment the AnimationIndex
       AnimationIndex = (AnimationIndex + 1) % Mudry.frames.length
     }
 
-    if (shouldRenderTransition) {
+    if (shouldRenderTransition) { // If we should render the transition screen
       fg.frontBuffer.synchronized {
         renderTransition()
       }
-    } else if (!shouldRenderAdvice) {
+    } else if (!shouldRenderAdvice) { // If we should render the game
       fg.frontBuffer.synchronized {
-        // 3) Pass the current AnimationIndex to renderWorld
+        // Pass the current AnimationIndex to renderWorld
         renderWorld(playerDirection, AnimationIndex)
       }
     } else {
-      fg.frontBuffer.synchronized {
+      fg.frontBuffer.synchronized { // If we should render the advice screen
         renderAdvice()
       }
     }
 
-    if (!gameMusic.audioClip.isRunning) {
+    if (!gameMusic.audioClip.isRunning) { // If the game music has stopped, restart it
       gameMusic.play()
     }
 
-    // Sync the game logic ~60 times a second
+    // Sync the game logic ~10 times a second
     fg.syncGameLogic(10)
   }
 }
