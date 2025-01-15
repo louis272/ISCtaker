@@ -60,7 +60,7 @@ object Level {
           Array(0, 0, 0, 0, 0, 0, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0)
         ),
-        22, true, (screenWidth - (gridWidth * tileSize)) / 2 - 90, 75, Pandemonica, "/res/level 1.png",
+        22, true, (screenWidth - (gridWidth * tileSize)) / 2 - 90, 75, Pandemonica, "/res/level 1.png"
       ),
 
       // Level 2
@@ -170,7 +170,7 @@ object Level {
           Array(0, 0, 0, 0, 0,-1, 0,-1, 0, 0),
           Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
         ),
-        23, true, (screenWidth - (gridWidth * tileSize)) / 2 - 70, 10, Zdrada, "/res/level 5.png",
+        23, true, (screenWidth - (gridWidth * tileSize)) / 2 - 70, 10, Zdrada, "/res/level 5.png"
       ),
 
       // Credits
