@@ -675,7 +675,7 @@ object Main extends App {
         case KeyEvent.VK_3      => currentLevelIndex = 3; loadLevel(currentLevelIndex) // Load level 3
         case KeyEvent.VK_4      => currentLevelIndex = 4; loadLevel(currentLevelIndex) // Load level 4
         case KeyEvent.VK_5      => currentLevelIndex = 5; loadLevel(currentLevelIndex) // Load level 5
-        case KeyEvent.VK_6      => currentLevelIndex = 6; loadLevel(currentLevelIndex) // Load level 6
+        case KeyEvent.VK_6      => currentLevelIndex = 6; loadLevel(currentLevelIndex) // Load credits
         case _                  => // Ignore
       }
     }
