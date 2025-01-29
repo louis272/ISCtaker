@@ -89,6 +89,7 @@ object Level {
         ),
         22, false, (screenWidth - (gridWidth * tileSize)) / 2 - 95, 85, Modeus, "/res/level 2.png"
       ),
+
       // Level 3
       new Level(
         Array(
