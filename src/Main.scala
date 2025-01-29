@@ -678,7 +678,6 @@ object Main extends App {
       }
     }
   })
-
   // Start the game music
   gameMusic.play()
 
