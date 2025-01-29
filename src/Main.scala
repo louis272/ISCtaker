@@ -23,9 +23,9 @@ object Main extends App {
   private val Mudry: EntityRender = new EntityRender( // EntityRender for Mudry
     List(
       "/res/Mudry - Idle.png",
-      "/res/Mudry - Left.png",
-      "/res/Mudry - Idle.png",
       "/res/Mudry - Right.png",
+      "/res/Mudry - Idle.png",
+      "/res/Mudry - Left.png",
     ),
     0.7
   )
@@ -429,8 +429,6 @@ object Main extends App {
       )
 
       if (currentLevelIndex!= levels.length -1) {
-        fg.setColor(Color.BLACK)
-        fg.drawFillRect(50,380,100,60)
         // Now draw the new text
         fg.setColor(Color.WHITE)
         fg.drawFancyString( // Draw the moves left
@@ -446,9 +444,9 @@ object Main extends App {
           shadowX = 0,
           shadowY = 0,
           shadowColor = Color.BLACK,
-          shadowThickness = 10,
+          shadowThickness = 0,
           outlineColor = Color.BLACK,
-          outlineThickness = 20)
+          outlineThickness = 0)
       }
 
       for (i <- 0 until gridWidth; j <- 0 until gridHeight) {
